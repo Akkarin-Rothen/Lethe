@@ -185,3 +185,30 @@ class Or(BinaryConnective):
 
     def evaluate(self, assignment: Assignment) -> bool:
         return self.left.evaluate(assignment) or self.right.evaluate(assignment)
+
+@dataclass(frozen=True)
+class Implies(BinaryConnective):
+    symbol: ClassVar[str] = ">"
+    latex_symbol: ClassVar[str] = r"\rightarrow"
+    right_associative: ClassVar[bool] = True
+    precedence = _PREC_IMPLIES
+
+    def evaluate(self, assignment: Assignment) -> bool:
+        return (not self.left.evaluate(assignment)) or self.right.evaluate(
+            assignment
+        )
+
+
+@dataclass(frozen=True)
+class Iff(BinaryConnective):
+    symbol: ClassVar[str] = "="
+    latex_symbol: ClassVar[str] = r"\leftrightarrow"
+    precedence = _PREC_IFF
+
+    def evaluate(self, assignment: Assignment) -> bool:
+        return self.left.evaluate(assignment) == self.right.evaluate(assignment)
+
+
+def signature(formula: Formula) -> tuple[str, ...]:
+    """The signature Sigma of ``formula``: its atoms in alphabetical order."""
+    return tuple(sorted(formula.atoms()))
