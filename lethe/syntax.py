@@ -22,17 +22,14 @@ _PREC_IFF = 0
 
 # Base class for other classes to inherit from
 class Formula: 
-    # prevent every inhereting class to get a dict
-    __slots__ = ()
-
-    #: binding strength of the outermost connective
+    #binding strength of the outermost connective
     precedence: int = _PREC_ATOM
 
     # raise NotImplementedError to force every inhereting class to do an implementation
     def evaluate(self, assignment: Assignment) -> bool:
         raise NotImplementedError
 
-    # frozenset[str] is an unchanged set of values
+    # frozenset[str] is an unchangeable set of values
     def atoms(self) -> frozenset[str]:
         raise NotImplementedError
 
@@ -45,7 +42,7 @@ class Formula:
     # used for parenthese rendering
     # it decides if a child formula need parentheses or not
     # A ∧ (B ∨ C) has the child B ∨ C
-    def _wrap(self, child: Formula, strict: bool, latex: bool) -> str:
+    def _wrap(self, child: Formula, *, strict: bool, latex: bool) -> str:
         text = child.to_latex() if latex else str(child)
         # sets needs=true if the precedence of the child is smaller then the own or id both are the same andt strict=true
         # strict is used to prevent (a>b)>c to be printet as  a > b > c
@@ -115,7 +112,7 @@ BOTTOM = Constant(False)
 # goal is to replace a not with either \lnot for latex or ! for the calculation
 @dataclass(frozen=True)
 class Not(Formula):
-    # holds the part of the formaula that Not negates
+    # holds the part of the whole formula that Not() negates
     sub: Formula
     precedence = _PREC_NOT
 
@@ -134,4 +131,57 @@ class Not(Formula):
     def __str__(self) -> str:
         return "!" + self._wrap(self.sub, strict=False, latex=False)
 
-    
+
+@dataclass(frozen=True)
+class BinaryConnective(Formula):
+    left: Formula
+    right: Formula
+
+    # program syntax symbol, filled in by subclasses
+    symbol: ClassVar[str] = ""
+    #latex syntax symbol, filled in by subclasses
+    latex_symbol: ClassVar[str] = ""
+    # ``True`` for right-associative connectives (implication)
+    right_associative: ClassVar[bool] = False
+
+    def atoms(self) -> frozenset[str]:
+        return self.left.atoms() | self.right.atoms()
+
+    def substitute(self, atom: str, value: bool) -> Formula:
+        return type(self)(
+            self.left.substitute(atom, value), self.right.substitute(atom, value)
+        )
+
+    def _render(self, *, latex: bool) -> str:
+        symbol = self.latex_symbol if latex else self.symbol
+        left = self._wrap(self.left, strict=self.right_associative, latex=latex)
+        right = self._wrap(
+            self.right, strict=not self.right_associative, latex=latex
+        )
+        return f"{left} {symbol} {right}"
+
+    def to_latex(self) -> str:
+        return self._render(latex=True)
+
+    def __str__(self) -> str:
+        return self._render(latex=False)
+
+
+@dataclass(frozen=True)
+class And(BinaryConnective):
+    symbol: ClassVar[str] = "&"
+    latex_symbol: ClassVar[str] = r"\land"
+    precedence = _PREC_AND
+
+    def evaluate(self, assignment: Assignment) -> bool:
+        return self.left.evaluate(assignment) and self.right.evaluate(assignment)
+
+
+@dataclass(frozen=True)
+class Or(BinaryConnective):
+    symbol: ClassVar[str] = "|"
+    latex_symbol: ClassVar[str] = r"\lor"
+    precedence = _PREC_OR
+
+    def evaluate(self, assignment: Assignment) -> bool:
+        return self.left.evaluate(assignment) or self.right.evaluate(assignment)
