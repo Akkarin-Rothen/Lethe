@@ -28,11 +28,11 @@ class Formula:
     #: binding strength of the outermost connective
     precedence: int = _PREC_ATOM
 
-    # raise NotImplementedError to force every inherting class to do an implementation
+    # raise NotImplementedError to force every inhereting class to do an implementation
     def evaluate(self, assignment: Assignment) -> bool:
         raise NotImplementedError
 
-    # frozenset[str] is an unchangle set of values
+    # frozenset[str] is an unchanged set of values
     def atoms(self) -> frozenset[str]:
         raise NotImplementedError
 
@@ -49,6 +49,8 @@ class Formula:
         text = child.to_latex() if latex else str(child)
         # sets needs=true if the precedence of the child is smaller then the own or id both are the same andt strict=true
         # strict is used to prevent (a>b)>c to be printet as  a > b > c
+        # < is used because the = case is handled on the or case
+        # strict is set on a rendering call
         needs = child.precedence < self.precedence or (strict and child.precedence == self.precedence )
         return f"({text})" if needs else text
 
@@ -71,7 +73,7 @@ class Atom(Formula):
     def atoms(self) -> frozenset[str]:
         return frozenset({self.name})
 
-    # substute atom string with top or bottom
+    # substitute atom string with top or bottom
     def substitute(self, atom: str, value: bool) -> Formula:
         if self.name != atom:
             return self
@@ -81,7 +83,7 @@ class Atom(Formula):
     def to_latex(self) -> str:
         return self.name
 
-    # return a sting for the computation
+    # return a string for the computation
     def __str__(self) -> str:
         return self.name
 
@@ -109,3 +111,27 @@ class Constant(Formula):
 
 TOP = Constant(True)
 BOTTOM = Constant(False)
+
+# goal is to replace a not with either \lnot for latex or ! for the calculation
+@dataclass(frozen=True)
+class Not(Formula):
+    # holds the part of the formaula that Not negates
+    sub: Formula
+    precedence = _PREC_NOT
+
+    def evaluate(self, assignment: Assignment) -> bool:
+        return not self.sub.evaluate(assignment)
+
+    def atoms(self) -> frozenset[str]:
+        return self.sub.atoms()
+
+    def substitute(self, atom: str, value: bool) -> Formula:
+        return Not(self.sub.substitute(atom, value))
+
+    def to_latex(self) -> str:
+        return r"\lnot " + self._wrap(self.sub, strict=False, latex=True)
+
+    def __str__(self) -> str:
+        return "!" + self._wrap(self.sub, strict=False, latex=False)
+
+    
