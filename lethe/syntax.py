@@ -18,8 +18,10 @@ _PREC_OR = 2
 _PREC_IMPLIES = 1
 _PREC_IFF = 0
 
+
+
 # Base class for other classes to inherit from
-class Fromula: 
+class Formula: 
     # prevent every inhereting class to get a dict
     __slots__ = ()
 
@@ -30,6 +32,7 @@ class Fromula:
     def evaluate(self, assignment: Assignment) -> bool:
         raise NotImplementedError
 
+    # frozenset[str] is an unchangle set of values
     def atoms(self) -> frozenset[str]:
         raise NotImplementedError
 
@@ -39,13 +42,70 @@ class Fromula:
     def to_latex(self) -> str:
         raise NotImplementedError
 
-    def _wrap(self, child: Formula, *, strict: bool, latex: bool) -> str:
+    # used for parenthese rendering
+    # it decides if a child formula need parentheses or not
+    # A ∧ (B ∨ C) has the child B ∨ C
+    def _wrap(self, child: Formula, strict: bool, latex: bool) -> str:
         text = child.to_latex() if latex else str(child)
-        needs = child.precedence < self.precedence or (
-            strict and child.precedence == self.precedence
-        )
+        # sets needs=true if the precedence of the child is smaller then the own or id both are the same andt strict=true
+        # strict is used to prevent (a>b)>c to be printet as  a > b > c
+        needs = child.precedence < self.precedence or (strict and child.precedence == self.precedence )
         return f"({text})" if needs else text
 
 
 
+# apply dataclass to Atom and make it unchangeable
+@dataclass(frozen=True)
+class Atom(Formula):
+    name: str
+    precedence = _PREC_ATOM
 
+    def evaluate(self, assignment: Assignment) -> bool:
+        try:
+            return assignment[self.name]
+        except KeyError:
+            raise KeyError(
+                f"atom {self.name!r} has no truth value in the assignment"
+            ) from None
+
+    def atoms(self) -> frozenset[str]:
+        return frozenset({self.name})
+
+    # substute atom string with top or bottom
+    def substitute(self, atom: str, value: bool) -> Formula:
+        if self.name != atom:
+            return self
+        return TOP if value else BOTTOM
+
+    # return latex compatible string   
+    def to_latex(self) -> str:
+        return self.name
+
+    # return a sting for the computation
+    def __str__(self) -> str:
+        return self.name
+
+
+@dataclass(frozen=True)
+class Constant(Formula):
+    value: bool
+    precedence = _PREC_ATOM
+
+    def evaluate(self, assignment: Assignment) -> bool:
+        return self.value
+
+    def atoms(self) -> frozenset[str]:
+        return frozenset()
+
+    def substitute(self, atom: str, value: bool) -> Formula:
+        return self
+
+    def to_latex(self) -> str:
+        return r"\top" if self.value else r"\bot"
+
+    def __str__(self) -> str:
+        return "1" if self.value else "0"
+
+
+TOP = Constant(True)
+BOTTOM = Constant(False)
