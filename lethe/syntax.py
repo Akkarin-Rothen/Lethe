@@ -33,9 +33,11 @@ class Formula:
     def atoms(self) -> frozenset[str]:
         raise NotImplementedError
 
+    # replaces one atom everywhere by TOP or BOTTOM and gives a new tree
     def substitute(self, atom: str, value: bool) -> Formula:
         raise NotImplementedError
 
+    # every object already has __str__, so only to_latex is declared here
     def to_latex(self) -> str:
         raise NotImplementedError
 
@@ -59,6 +61,8 @@ class Atom(Formula):
     name: str
     precedence = _PREC_ATOM
 
+    # reads the own name from the assignment
+    # "from None" hides the first error, so only the clear message is shown
     def evaluate(self, assignment: Assignment) -> bool:
         try:
             return assignment[self.name]
@@ -67,10 +71,12 @@ class Atom(Formula):
                 f"atom {self.name!r} has no truth value in the assignment"
             ) from None
 
+    # an atom is a leaf, so the recursion stops here
     def atoms(self) -> frozenset[str]:
         return frozenset({self.name})
 
     # substitute atom string with top or bottom
+    # another name gives self back, because the tree cannot change
     def substitute(self, atom: str, value: bool) -> Formula:
         if self.name != atom:
             return self
@@ -85,17 +91,22 @@ class Atom(Formula):
         return self.name
 
 
+# the two constants of Boole, TOP and BOTTOM
+# a constant binds like an atom, so it never gets parentheses
 @dataclass(frozen=True)
 class Constant(Formula):
     value: bool
     precedence = _PREC_ATOM
 
+    # the assignment has no effect here
     def evaluate(self, assignment: Assignment) -> bool:
         return self.value
 
+    # a constant holds no atom
     def atoms(self) -> frozenset[str]:
         return frozenset()
 
+    # nothing to replace
     def substitute(self, atom: str, value: bool) -> Formula:
         return self
 
@@ -106,6 +117,9 @@ class Constant(Formula):
         return "1" if self.value else "0"
 
 
+# the only two constant objects of the program
+# "is TOP" works only if all constants come from here
+# so never write Constant(True) at another place
 TOP = Constant(True)
 BOTTOM = Constant(False)
 
@@ -116,24 +130,32 @@ class Not(Formula):
     sub: Formula
     precedence = _PREC_NOT
 
+    # invert the value of the child
     def evaluate(self, assignment: Assignment) -> bool:
         return not self.sub.evaluate(assignment)
 
+    # Not adds no atom
     def atoms(self) -> frozenset[str]:
         return self.sub.atoms()
 
+    # builds a new Not, the old tree stays as it is
     def substitute(self, atom: str, value: bool) -> Formula:
         return Not(self.sub.substitute(atom, value))
 
+    # the space after \lnot is needed, else LaTeX reads the command \lnota
     def to_latex(self) -> str:
         return r"\lnot " + self._wrap(self.sub, strict=False, latex=True)
 
+    # strict=False keeps !!a free of parentheses, !(a | b) still gets them
     def __str__(self) -> str:
         return "!" + self._wrap(self.sub, strict=False, latex=False)
 
 
+# shared base of the four two-place connectives
+# a subclass gives only the symbols, the precedence and evaluate
 @dataclass(frozen=True)
 class BinaryConnective(Formula):
+    # a child can be any node type, so the tree can nest
     left: Formula
     right: Formula
 
@@ -144,14 +166,19 @@ class BinaryConnective(Formula):
     # ``True`` for right-associative connectives (implication)
     right_associative: ClassVar[bool] = False
 
+    # here | is the set union of Python, not the disjunction of the logic
     def atoms(self) -> frozenset[str]:
         return self.left.atoms() | self.right.atoms()
 
+    # type(self) gives the concrete class, so And builds an And, Iff an Iff
     def substitute(self, atom: str, value: bool) -> Formula:
         return type(self)(
             self.left.substitute(atom, value), self.right.substitute(atom, value)
         )
 
+    # one method for both outputs, only the symbols differ
+    # left-associative (& | =): left free, right in parentheses -> a | b | c
+    # right-associative (>):    the other way round             -> a > b > c
     def _render(self, *, latex: bool) -> str:
         symbol = self.latex_symbol if latex else self.symbol
         left = self._wrap(self.left, strict=self.right_associative, latex=latex)
@@ -190,9 +217,12 @@ class Or(BinaryConnective):
 class Implies(BinaryConnective):
     symbol: ClassVar[str] = ">"
     latex_symbol: ClassVar[str] = r"\rightarrow"
+    # the only right-associative connective, so a > b > c means a > (b > c)
     right_associative: ClassVar[bool] = True
     precedence = _PREC_IMPLIES
 
+    # material implication, written as !a | b
+    # false in one case only: left true and right false
     def evaluate(self, assignment: Assignment) -> bool:
         return (not self.left.evaluate(assignment)) or self.right.evaluate(
             assignment
@@ -203,12 +233,16 @@ class Implies(BinaryConnective):
 class Iff(BinaryConnective):
     symbol: ClassVar[str] = "="
     latex_symbol: ClassVar[str] = r"\leftrightarrow"
+    # binds most weakly, so a & b = c means (a & b) = c
     precedence = _PREC_IFF
 
+    # two truth values are equivalent if they are equal
     def evaluate(self, assignment: Assignment) -> bool:
         return self.left.evaluate(assignment) == self.right.evaluate(assignment)
 
 
+# a function and not a method, because it works on the whole tree
+# sorted and a tuple, so position i always belongs to the same atom
+# the truth tables and the group keys later depend on this order
 def signature(formula: Formula) -> tuple[str, ...]:
-    """The signature Sigma of ``formula``: its atoms in alphabetical order."""
     return tuple(sorted(formula.atoms()))
