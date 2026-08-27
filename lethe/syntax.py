@@ -1,6 +1,9 @@
+# syntax.py defines what a formula is: an immutable tree of atoms, the two constants and five connectives.
+# Each node can do four things — give its truth value under an assignment, name its atoms, replace an atom by ⊤/⊥, and print itself as program text or as LaTeX.
+
 # For error free use of annotations
 from __future__ import annotations
-# helps to work with classes cause it constructs default functions like __init__ 
+# helps to work with classes cause it constructs default functions like __init__
 from dataclasses import dataclass
 # Mapping is used for key,value data structures
 # ClassVar is used for class variables that belong to the class and not to every single object
@@ -21,11 +24,11 @@ _PREC_IFF = 0
 
 
 # Base class for other classes to inherit from
-class Formula: 
+class Formula:
     #binding strength of the outermost connective
     precedence: int = _PREC_ATOM
 
-    # raise NotImplementedError to force every inhereting class to do an implementation
+    # raise NotImplementedError to force every inheriting class to do an implementation
     def evaluate(self, assignment: Assignment) -> bool:
         raise NotImplementedError
 
@@ -41,13 +44,14 @@ class Formula:
     def to_latex(self) -> str:
         raise NotImplementedError
 
-    # used for parenthese rendering
-    # it decides if a child formula need parentheses or not
+    # used for parenthesis rendering
+    # it decides if a child formula needs parentheses or not
     # A ∧ (B ∨ C) has the child B ∨ C
     def _wrap(self, child: Formula, *, strict: bool, latex: bool) -> str:
         text = child.to_latex() if latex else str(child)
-        # sets needs=true if the precedence of the child is smaller then the own or id both are the same andt strict=true
-        # strict is used to prevent (a>b)>c to be printet as  a > b > c
+        # sets needs=True if the child binds more weakly than self,
+        # or if both bind equally and strict=True
+        # strict is used to prevent (a>b)>c from being printed as a > b > c
         # < is used because the = case is handled on the or case
         # strict is set on a rendering call
         needs = child.precedence < self.precedence or (strict and child.precedence == self.precedence )
@@ -82,7 +86,7 @@ class Atom(Formula):
             return self
         return TOP if value else BOTTOM
 
-    # return latex compatible string   
+    # return latex compatible string
     def to_latex(self) -> str:
         return self.name
 
