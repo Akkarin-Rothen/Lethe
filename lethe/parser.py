@@ -8,7 +8,18 @@ import re
 # helps to work with classes because it constructs default functions like __init__
 from dataclasses import dataclass
 
-from . import syntax
+from .syntax import (
+    And,
+    Atom,
+    BOTTOM,
+    Formula,
+    Iff,
+    Implies,
+    Not,
+    Or,
+    TOP,
+)
+
 
 # Named capture groups.
 # (?P<space>\s+) to filter out whitespace
@@ -81,14 +92,92 @@ class _Parser:
         self._source = source
         self._index = 0
 
+    # _peek gives the next token without moving the read position, and None at the end of the input.
     def _peek(self) -> _Token | None:
         if self._index < len(self._tokens):
             return self._tokens[self._index]
         return None
 
+    # Takes the next token and moves forward if it is exactly that operator, otherwise leaves everything as it is and returns False.
     def _consume_operator(self, symbol: str) -> bool:
         token = self._peek()
         if token is not None and token.kind == "op" and token.text == symbol:
             self._index += 1
             return True
         return False
+
+    # Rejects an empty token list, runs _iff, and rejects anything left over.
+    def parse(self) -> Formula:
+        if not self._tokens:
+            raise ParseError("empty formula")
+        formula = self._iff()
+        remaining = self._peek()
+        if remaining is not None:
+            raise ParseError(
+                f"unexpected {remaining.text!r} at position {remaining.position}"
+            )
+        return formula
+
+    # Reads an implication, then loops on = and hangs the tree built so far on the left.
+    def _iff(self) -> Formula:
+        formula = self._implies()
+        while self._consume_operator("="):
+            formula = Iff(formula, self._implies())
+        return formula
+
+    # Reads a disjunction, and on > calls itself to take the whole rest as the right child.
+    def _implies(self) -> Formula:
+        formula = self._disjunction()
+        if self._consume_operator(">"):
+            return Implies(formula, self._implies())
+        return formula
+
+    # Reads a conjunction, then loops on |.
+    # & binds tighter, so it must be one level deeper and take its tokens first — that is how a | b & c becomes a | (b & c).
+    def _disjunction(self) -> Formula:
+        formula = self._conjunction()
+        while self._consume_operator("|"):
+            formula = Or(formula, self._conjunction())
+        return formula
+
+    # Reads a negation, then loops on &.
+    # Same shape one level down, because ! binds tighter than &.
+    def _conjunction(self) -> Formula:
+        formula = self._negation()
+        while self._consume_operator("&"):
+            formula = And(formula, self._negation())
+        return formula
+
+    # On ! builds a Not around a call to itself, otherwise goes to _primary.
+    def _negation(self) -> Formula:
+        if self._consume_operator("!"):
+            return Not(self._negation())
+        return self._primary()
+
+    def _primary(self) -> Formula:
+        token = self._peek()
+        if token is None:
+            raise ParseError(f"unexpected end of formula in {self._source!r}")
+        if token.kind == "atom":
+            self._index += 1
+            return Atom(token.text)
+        if token.kind == "const":
+            self._index += 1
+            return TOP if token.text == "1" else BOTTOM
+        if token.text == "(":
+            self._index += 1
+            inner = self._iff()
+            if not self._consume_operator(")"):
+                raise ParseError(
+                    f"missing closing parenthesis for the one at position "
+                    f"{token.position}"
+                )
+            return inner
+        raise ParseError(
+            f"unexpected {token.text!r} at position {token.position}"
+        )
+
+# Runs both functions: _Parser(_tokenize(text), text).parse().
+# A new _Parser per call, because the object carries _index, and a shared one would keep the read position of the last formula.
+def parse(text: str) -> Formula:
+    return _Parser(_tokenize(text), text).parse()
