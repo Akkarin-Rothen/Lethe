@@ -71,3 +71,24 @@ def _tokenize(text: str) -> list[_Token]:
         # add the found token to the token list
         tokens.append(_Token(kind, value, match.start()))
     return tokens
+
+
+# Parese a list of given tokens. 
+class _Parser:
+    # constructor function
+    def __init__(self, tokens: list[_Token], source: str) -> None:
+        self._tokens = tokens
+        self._source = source
+        self._index = 0
+
+    def _peek(self) -> _Token | None:
+        if self._index < len(self._tokens):
+            return self._tokens[self._index]
+        return None
+
+    def _consume_operator(self, symbol: str) -> bool:
+        token = self._peek()
+        if token is not None and token.kind == "op" and token.text == symbol:
+            self._index += 1
+            return True
+        return False
