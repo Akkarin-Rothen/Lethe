@@ -8,11 +8,12 @@ from dataclasses import dataclass
 # Import type alias Assignment, class Formula and fuction signature from syntax.py
 from .syntax import Assignment, Formula, signature
 
-# omega[i] belongs to sigma[i], only correct because signature() sorts
+# position i belongs to sigma[i], only correct because signature() sorts
 # a tuple and not a dict, so it can be a dict key, a set element and can be sorted
 Interpretation = tuple[bool, ...]
 
 # gives back a list of tuples with every possible truth value combination for a signature of that size
+# needed by TruthTable.build, it produces the rows of the table
 def create_truth_value_combinations(size: int) -> list[Interpretation]:
     if size < 0:
         raise ValueError("a signature cannot have a negative size")
@@ -26,6 +27,7 @@ def create_truth_value_combinations(size: int) -> list[Interpretation]:
 
 
 # pairs the atoms with their truth values, the form Formula.evaluate needs
+# needed by TruthTable.build and later by marginalization.py
 def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assignment:
     # zip stops at the shorter input and says nothing
     if len(atoms) != len(truth_values):
@@ -38,6 +40,7 @@ def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assig
     return dict(zip(atoms, truth_values))
 
 # holds the complete truth table of one formula over a fixed signature
+# everything later builds on it: the formula catalog, the forgetting and both renderers
 @dataclass(frozen=True)
 class TruthTable:
     formula: Formula
@@ -72,24 +75,16 @@ class TruthTable:
     def __len__(self) -> int:
         return len(self.rows)
 
-
-    # gives back the rows where the formula is true
-    def models(self) -> tuple[Interpretation, ...]:
-        found = []
-        # zip pairs row i with value i
-        for truth_values, value in zip(self.rows, self.values):
-            if value:
-                found.append(truth_values)
-        return tuple(found)
-
     # counts how many rows are true, True is 1 in Python so sum works
     def true_rows(self) -> int:
         return sum(self.values)
 
-    # true if at least one row is true
-    def is_satisfiable(self) -> bool:
-        return any(self.values)
 
-    # true if every row is true
-    def is_tautology(self) -> bool:
-        return all(self.values)
+# true if both formulas have the same models
+# needed to show that a forgotten formula still means the same
+def equivalent(left: Formula, right: Formula) -> bool:
+    # both tables need the same signature, else the rows do not line up
+    joint_sigma = tuple(sorted(left.atoms() | right.atoms()))
+    left_table = TruthTable.build(left, joint_sigma)
+    right_table = TruthTable.build(right, joint_sigma)
+    return left_table.values == right_table.values
