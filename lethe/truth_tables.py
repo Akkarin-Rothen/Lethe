@@ -1,4 +1,5 @@
 # truth_tables.py builds the complete truth table of a formula over a fixed signature.
+
 # For error-free use of annotations
 from __future__ import annotations
 # provides tool for iterations
@@ -6,11 +7,11 @@ import itertools
 # helps to work with classes because it constructs default functions like __init__
 from dataclasses import dataclass
 
-# Import type alias Assignment, class Formula and fuction signature from syntax.py
+# Import type alias Assignment, class Formula and function signature from syntax.py
 from .syntax import Assignment, Formula, signature
 
 # position i belongs to sigma[i], only correct because signature() sorts
-# a tuple and not a dict, so it can be a dict key, a set element and can be sorted
+# a tuple and not a list, only a tuple can be a dict key or a set element
 Interpretation = tuple[bool, ...]
 
 # gives back a list of tuples with every possible truth value combination for a signature of that size
