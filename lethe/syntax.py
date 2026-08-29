@@ -1,11 +1,11 @@
 # syntax.py defines what a formula is: an immutable tree of atoms, the two constants and five connectives.
-# Each node can do four things — give its truth value under an assignment, name its atoms, replace an atom by ⊤/⊥, and print itself as program text or as LaTeX.
+# Every node can do four things: give its truth value for an assignment, name its atoms, replace an atom by TOP or BOTTOM, and print itself as text or as LaTeX.
 
-# For error free use of annotations
+# For error-free use of annotations
 from __future__ import annotations
-# helps to work with classes cause it constructs default functions like __init__
+# helps to work with classes because it constructs default functions like __init__
 from dataclasses import dataclass
-# Mapping is used for key,value data structures
+# Mapping is used for key, value data structures
 # ClassVar is used for class variables that belong to the class and not to every single object
 from typing import ClassVar, Mapping
 
@@ -25,7 +25,7 @@ _PREC_IFF = 0
 
 # Base class for other classes to inherit from
 class Formula:
-    #binding strength of the outermost connective
+    # binding strength of the outermost connective
     precedence: int = _PREC_ATOM
 
     # raise NotImplementedError to force every inheriting class to do an implementation
@@ -44,8 +44,7 @@ class Formula:
     def to_latex(self) -> str:
         raise NotImplementedError
 
-    # used for parenthesis rendering
-    # it decides if a child formula needs parentheses or not
+    # decides if a child formula needs parentheses
     # A ∧ (B ∨ C) has the child B ∨ C
     def _wrap(self, child: Formula, *, strict: bool, latex: bool) -> str:
         text = child.to_latex() if latex else str(child)
@@ -156,7 +155,7 @@ class Not(Formula):
 
 
 # shared base of the four two-place connectives
-# a subclass gives only the symbols, the precedence and evaluate
+# a subclass sets only the symbols, the precedence and evaluate
 @dataclass(frozen=True)
 class BinaryConnective(Formula):
     # a child can be any node type, so the tree can nest
@@ -165,9 +164,9 @@ class BinaryConnective(Formula):
 
     # program syntax symbol, filled in by subclasses
     symbol: ClassVar[str] = ""
-    #latex syntax symbol, filled in by subclasses
+    # latex syntax symbol, filled in by subclasses
     latex_symbol: ClassVar[str] = ""
-    # ``True`` for right-associative connectives (implication)
+    # True only for Implies, the one right-associative connective
     right_associative: ClassVar[bool] = False
 
     # here | is the set union of Python, not the disjunction of the logic
