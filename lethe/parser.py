@@ -84,21 +84,25 @@ def _tokenize(text: str) -> list[_Token]:
     return tokens
 
 
-# Parese a list of given tokens. 
+# Parse a list of given tokens.
 class _Parser:
     # constructor function
     def __init__(self, tokens: list[_Token], source: str) -> None:
         self._tokens = tokens
+        # only used for error messages
         self._source = source
+        # read position in the token list
         self._index = 0
 
-    # _peek gives the next token without moving the read position, and None at the end of the input.
+    # gives the next token without moving the read position
+    # returns None at the end of the list, that is not an error here
     def _peek(self) -> _Token | None:
         if self._index < len(self._tokens):
             return self._tokens[self._index]
         return None
 
-    # Takes the next token and moves forward if it is exactly that operator, otherwise leaves everything as it is and returns False.
+    # moves one step forward only if the next token is that operator
+    # returns False and changes nothing otherwise
     def _consume_operator(self, symbol: str) -> bool:
         token = self._peek()
         if token is not None and token.kind == "op" and token.text == symbol:
@@ -106,11 +110,13 @@ class _Parser:
             return True
         return False
 
-    # Rejects an empty token list, runs _iff, and rejects anything left over.
+    # rejects an empty list, builds the tree, then rejects leftover tokens
     def parse(self) -> Formula:
         if not self._tokens:
             raise ParseError("empty formula")
         formula = self._iff()
+        # _iff stops at the first complete formula
+        # without this check "a b" would return only a
         remaining = self._peek()
         if remaining is not None:
             raise ParseError(
@@ -118,42 +124,44 @@ class _Parser:
             )
         return formula
 
-    # Reads an implication, then loops on = and hangs the tree built so far on the left.
+    # = binds weakest, so this is the first rule
+    # the while loop makes = left-associative: a = b = c gives (a = b) = c
     def _iff(self) -> Formula:
         formula = self._implies()
         while self._consume_operator("="):
             formula = Iff(formula, self._implies())
         return formula
 
-    # Reads a disjunction, and on > calls itself to take the whole rest as the right child.
+    # the call to itself makes > right-associative: a > b > c gives a > (b > c)
     def _implies(self) -> Formula:
         formula = self._disjunction()
         if self._consume_operator(">"):
             return Implies(formula, self._implies())
         return formula
 
-    # Reads a conjunction, then loops on |.
-    # & binds tighter, so it must be one level deeper and take its tokens first — that is how a | b & c becomes a | (b & c).
+    # & binds tighter, so _conjunction runs first and takes its tokens
+    # that is how a | b & c gives a | (b & c)
     def _disjunction(self) -> Formula:
         formula = self._conjunction()
         while self._consume_operator("|"):
             formula = Or(formula, self._conjunction())
         return formula
 
-    # Reads a negation, then loops on &.
-    # Same shape one level down, because ! binds tighter than &.
+    # same shape one level down, ! binds tighter than &
     def _conjunction(self) -> Formula:
         formula = self._negation()
         while self._consume_operator("&"):
             formula = And(formula, self._negation())
         return formula
 
-    # On ! builds a Not around a call to itself, otherwise goes to _primary.
+    # calls itself again, so !!a works
     def _negation(self) -> Formula:
         if self._consume_operator("!"):
             return Not(self._negation())
         return self._primary()
 
+    # builds the leaves: atoms, constants and brackets
+    # the only rule that can reject a token
     def _primary(self) -> Formula:
         token = self._peek()
         if token is None:
@@ -163,10 +171,13 @@ class _Parser:
             return Atom(token.text)
         if token.kind == "const":
             self._index += 1
+            # TOP and BOTTOM come from syntax.py, so parse("1") is TOP is True
             return TOP if token.text == "1" else BOTTOM
         if token.text == "(":
             self._index += 1
+            # inside a bracket the precedence starts again, so go back to _iff
             inner = self._iff()
+            # the message gives the position of the opening bracket
             if not self._consume_operator(")"):
                 raise ParseError(
                     f"missing closing parenthesis for the one at position "
@@ -177,7 +188,7 @@ class _Parser:
             f"unexpected {token.text!r} at position {token.position}"
         )
 
-# Runs both functions: _Parser(_tokenize(text), text).parse().
-# A new _Parser per call, because the object carries _index, and a shared one would keep the read position of the last formula.
+# runs both stages, the tokenizer and the parser
+# a new _Parser per call, because _index would keep the old read position
 def parse(text: str) -> Formula:
     return _Parser(_tokenize(text), text).parse()
