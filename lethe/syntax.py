@@ -9,7 +9,7 @@ from dataclasses import dataclass
 # ClassVar is used for class variables that belong to the class and not to every single object
 from typing import ClassVar, Mapping
 
-# is used to store truth values for atoms
+#  type alias for Mapping[str, bool] is used to store truth values for atoms
 Assignment = Mapping[str, bool]
 
 # Binding strength, used to place the minimal number of parentheses.
