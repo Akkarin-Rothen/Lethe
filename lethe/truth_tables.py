@@ -1,3 +1,4 @@
+# truth_tables.py builds the complete truth table of a formula over a fixed signature.
 # For error-free use of annotations
 from __future__ import annotations
 # provides tool for iterations
