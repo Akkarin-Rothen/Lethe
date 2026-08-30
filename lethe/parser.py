@@ -1,4 +1,5 @@
-# parser.py does the opposite of printing: it reads a text like "(a|b)&c" and builds the tree, in two stages — a tokenizer that cuts the text into pieces, and a recursive-descent parser that turns those pieces into nodes.
+# parser.py does the opposite of printing: it reads a text like "(a|b)&c" and builds the tree.
+# it works in two stages: a tokenizer cuts the text into pieces, a recursive descent parser turns those pieces into nodes.
 # The precedence is not a number here but the order of the parser methods, and a while loop or a recursive call decides left- against right-associativity.
 
 # For error-free use of annotations
@@ -44,8 +45,11 @@ _UNICODE_ALIASES = {
     "⊥": "0",  # bottom
 }
 
+# raised when an input string is not a well formed formula
+# the class body is empty, pass is the placeholder Python needs
 class ParseError(ValueError):
-    """Raised when an input string is not a well-formed formula."""
+    pass
+
 
 @dataclass(frozen=True)
 class _Token:

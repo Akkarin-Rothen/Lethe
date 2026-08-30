@@ -1,4 +1,5 @@
-# forgetting.py performs syntactical forgetting VarForget. Only manipulates the formula. Does not create a truth table.
+# forgetting.py performs syntactical forgetting VarForget.
+# the module only manipulates the formula. it does not create a truth table.
 
 
 from __future__ import annotations
@@ -22,11 +23,15 @@ def substitute(formula: Formula, atom: str, value: bool) -> Formula:
     return formula.substitute(atom, value)
 
 
+# forgets every atom of atoms from the formula
+# VarForget(A, a) is A[a/1] | A[a/0], applied once per atom
+# set removes duplicates, sorted makes the printed result reproducible
+# simplify runs inside the loop, else the formula doubles with every atom
 def var_forget(formula: Formula, atoms: Iterable[str]) -> Formula:
     result = formula
     for atom in sorted(set(atoms)):
         if atom not in result.atoms():
-            # Nothing to forget; the formula does not mention the atom.
+            # nothing to forget, the formula does not mention this atom
             continue
         result = simplify(
             Or(substitute(result, atom, True), substitute(result, atom, False))
