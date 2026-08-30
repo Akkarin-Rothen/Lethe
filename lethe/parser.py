@@ -78,7 +78,10 @@ def _tokenize(text: str) -> list[_Token]:
         value = match.group()
         if kind == "unicode":
             value = _UNICODE_ALIASES[value]
-            kind = "const" if value in "01" else "op"
+            if value in "01":
+                kind = "const"
+            else:
+                kind = "op"
         # add the found token to the token list
         tokens.append(_Token(kind, value, match.start()))
     return tokens
@@ -172,7 +175,10 @@ class _Parser:
         if token.kind == "const":
             self._index += 1
             # TOP and BOTTOM come from syntax.py, so parse("1") is TOP is True
-            return TOP if token.text == "1" else BOTTOM
+            if token.text == "1":
+                return TOP
+            else:
+                return BOTTOM
         if token.text == "(":
             self._index += 1
             # inside a bracket the precedence starts again, so go back to _iff

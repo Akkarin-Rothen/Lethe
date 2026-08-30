@@ -47,14 +47,20 @@ class Formula:
     # decides if a child formula needs parentheses
     # A ∧ (B ∨ C) has the child B ∨ C
     def _wrap(self, child: Formula, *, strict: bool, latex: bool) -> str:
-        text = child.to_latex() if latex else str(child)
+        if latex:
+            text = child.to_latex()
+        else:
+            text = str(child)
         # sets needs=True if the child binds more weakly than self,
         # or if both bind equally and strict=True
         # strict is used to prevent (a>b)>c from being printed as a > b > c
         # < is used because the = case is handled on the or case
         # strict is set on a rendering call
         needs = child.precedence < self.precedence or (strict and child.precedence == self.precedence )
-        return f"({text})" if needs else text
+        if needs:
+            return f"({text})"
+        else:
+            return text
 
 
 
@@ -83,7 +89,10 @@ class Atom(Formula):
     def substitute(self, atom: str, value: bool) -> Formula:
         if self.name != atom:
             return self
-        return TOP if value else BOTTOM
+        if value:
+            return TOP
+        else:
+            return BOTTOM
 
     # return latex compatible string
     def to_latex(self) -> str:
@@ -114,10 +123,16 @@ class Constant(Formula):
         return self
 
     def to_latex(self) -> str:
-        return r"\top" if self.value else r"\bot"
+        if self.value:
+            return r"\top"
+        else:
+            return r"\bot"
 
     def __str__(self) -> str:
-        return "1" if self.value else "0"
+        if self.value:
+            return "1"
+        else:
+            return "0"
 
 
 # the only two constant objects of the program
@@ -183,7 +198,10 @@ class BinaryConnective(Formula):
     # left-associative (& | =): left free, right in parentheses -> a | b | c
     # right-associative (>):    the other way round             -> a > b > c
     def _render(self, *, latex: bool) -> str:
-        symbol = self.latex_symbol if latex else self.symbol
+        if latex:
+            symbol = self.latex_symbol
+        else:
+            symbol = self.symbol
         left = self._wrap(self.left, strict=self.right_associative, latex=latex)
         right = self._wrap(
             self.right, strict=not self.right_associative, latex=latex

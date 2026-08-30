@@ -59,7 +59,10 @@ class TruthTable:
     # We want it to be "cls", the class itself. Without it the first parameter in a function in a class is always "self"
     @classmethod
     def build(cls, formula: Formula, sigma: tuple[str, ...] | None = None) -> TruthTable:
-        sigma = signature(formula) if sigma is None else tuple(sigma)
+        if sigma is None:
+            sigma = signature(formula)
+        else:
+            sigma = tuple(sigma)
         missing = formula.atoms() - set(sigma)
         if missing:
             raise ValueError(
