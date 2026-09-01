@@ -19,6 +19,7 @@ from .syntax import (
 )
 
 # substitutes the atom for the truth value TOP or BOTTOM
+# example: substitute((a | b) & c, 'c', True) gives (a | b) & 1
 def substitute(formula: Formula, atom: str, value: bool) -> Formula:
     return formula.substitute(atom, value)
 
@@ -27,9 +28,12 @@ def substitute(formula: Formula, atom: str, value: bool) -> Formula:
 # VarForget(A, a) is A[a/1] | A[a/0], applied once per atom
 # set removes duplicates, sorted makes the printed result reproducible
 # simplify runs inside the loop, else the formula doubles with every atom
-def var_forget(formula: Formula, atoms: Iterable[str]) -> Formula:
+# example: var_forget((a | b) & c, ['c']) gives a | b
+# example: var_forget((a | b) & c, ['b', 'c']) gives 1
+# example: var_forget((a | b) & c, ['z']) gives the formula back, z does not occur
+def var_forget(formula: Formula, atoms_to_forget: Iterable[str]) -> Formula:
     result = formula
-    for atom in sorted(set(atoms)):
+    for atom in sorted(set(atoms_to_forget)):
         if atom not in result.atoms():
             # nothing to forget, the formula does not mention this atom
             continue
@@ -46,16 +50,17 @@ def var_forget(formula: Formula, atoms: Iterable[str]) -> Formula:
 #   !!X gives X
 # And, Or, Implies and Iff go to _simplify_binary
 # an Atom and a Constant are leaves, the function returns them unchanged
+# example: ((a & 1) | 0) > ((b | 0) & 1) gives a > b
 def simplify(formula: Formula) -> Formula:
     if isinstance(formula, Not):
-        inner = simplify(formula.sub)
+        inner = simplify(formula.negated)
         if isinstance(inner, Constant):
             if inner.value:
                 return BOTTOM
             else:
                 return TOP
         if isinstance(inner, Not):
-            return inner.sub
+            return inner.negated
         return Not(inner)
 
     if isinstance(formula, (And, Or, Implies, Iff)):
@@ -67,7 +72,7 @@ def simplify(formula: Formula) -> Formula:
 
 
 # folds one two-place node, the caller has already simplified both children
-# kind is the class of the node, so one function serves all four connectives
+# node_type is the class of the node, so one function serves all four connectives
 # And and Or have their own function, Implies and Iff are folded here
 # the rules for Implies are:
 #   1 > X gives X
@@ -82,12 +87,13 @@ def simplify(formula: Formula) -> Formula:
 #   X = 0 gives !X
 #   X = X gives 1
 # an unknown class raises TypeError
-def _simplify_binary(kind: type[Formula], left: Formula, right: Formula) -> Formula:
-    if kind is And:
+# example: node_type Or with left 1 gives 1, with left 0 gives the right side
+def _simplify_binary(node_type: type[Formula], left: Formula, right: Formula) -> Formula:
+    if node_type is And:
         return _simplify_and(left, right)
-    if kind is Or:
+    if node_type is Or:
         return _simplify_or(left, right)
-    if kind is Implies:
+    if node_type is Implies:
         # A > B means the same as !A | B
         # the code keeps the Implies, so the printed formula stays close to the input
         if isinstance(left, Constant):
@@ -103,7 +109,7 @@ def _simplify_binary(kind: type[Formula], left: Formula, right: Formula) -> Form
         if left == right:
             return TOP
         return Implies(left, right)
-    if kind is Iff:
+    if node_type is Iff:
         if isinstance(left, Constant):
             if left.value:
                 return right
@@ -117,7 +123,7 @@ def _simplify_binary(kind: type[Formula], left: Formula, right: Formula) -> Form
         if left == right:
             return TOP
         return Iff(left, right)
-    raise TypeError(f"cannot simplify {kind!r}")
+    raise TypeError(f"cannot simplify {node_type!r}")
 
 # simplifies one And node
 # both children are already simple when this function runs
@@ -127,6 +133,7 @@ def _simplify_binary(kind: type[Formula], left: Formula, right: Formula) -> Form
 #   X & X gives X
 #   X & !X gives 0
 # no rule fits, then the function builds a new And
+# example: 1 & a gives a, a & !a gives 0, a & b stays a & b
 def _simplify_and(left: Formula, right: Formula) -> Formula:
     if isinstance(left, Constant):
         if left.value:
@@ -154,6 +161,7 @@ def _simplify_and(left: Formula, right: Formula) -> Formula:
 #   X | !X gives 1
 #   X | (X & Y) gives X
 # no rule fits, then the function builds a new Or
+# example: 1 | a gives 1, a | !a gives 1, a | (a & b) gives a
 def _simplify_or(left: Formula, right: Formula) -> Formula:
     if isinstance(left, Constant):
         if left.value:
@@ -177,10 +185,10 @@ def _simplify_or(left: Formula, right: Formula) -> Formula:
 
 # true if the two formulas are X and !X, in either order
 # the goal is to fold them away: a | !a becomes 1, a & !a becomes 0
-# left is !a, left.sub is a and right is a, then true
-# the same the other way round: right is !a, right.sub is a and left is a
+# left is !a, left.negated is a and right is a, then true
+# the same the other way round: right is !a, right.negated is a and left is a
 def _complementary(left: Formula, right: Formula) -> bool:
-    if (isinstance(left, Not) and left.sub == right) or (isinstance(right, Not) and right.sub == left):
+    if (isinstance(left, Not) and left.negated == right) or (isinstance(right, Not) and right.negated == left):
         return True
     return False
 
@@ -192,6 +200,9 @@ def _absorbs(outer: Formula, inner: Formula) -> bool:
     return outer in _conjuncts(inner)
 
 
+# example: a & b & c gives [a, b, c]
+# example: a & (b | c) gives [a, b | c], the Or stays whole
+# example: a | b gives [a | b], not an And, so one element
 def _conjuncts(formula: Formula) -> list[Formula]:
     # checking if formula is of type AND
     if isinstance(formula, And):

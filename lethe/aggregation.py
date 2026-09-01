@@ -10,20 +10,24 @@ from typing import Callable, Sequence
 
 # the truth values of one group, one per row
 # Sequence and not Iterable, because majority needs len()
+# example: (F, F, F, T) is a group of four rows with one true row
 Group = Sequence[bool]
 
 # what every aggregate looks like from outside: one group in, one truth value out
+# example: maximum, minimum and majority all match this shape
 Aggregate = Callable[[Group], bool]
 
 
 # true if at least one value in the group is true
 # this is the classical case, it reproduces VarForget
+# example: (F, F, F, T) gives True, (F, F, F, F) gives False
 def maximum(group: Group) -> bool:
     return any(group)
 
 
 # true if every value in the group is true
 # one false value is enough to make the whole group false
+# example: (T, T, T) gives True, (F, F, F, T) gives False
 def minimum(group: Group) -> bool:
     return all(group)
 
@@ -31,6 +35,8 @@ def minimum(group: Group) -> bool:
 # true if at least half of the values are true
 # >= is the tie rule, a tie counts as true
 # 2 * sum keeps the comparison in whole numbers, no float is compared
+# example: (T, F) gives True, that is the tie
+# example: (F, F, F, T) gives False, one true row out of four
 def majority(group: Group) -> bool:
     return 2 * sum(group) >= len(group)
 
@@ -38,6 +44,8 @@ def majority(group: Group) -> bool:
 # true if at least k values of the group are true
 # Th_k is the general case, Th_1 is max, Th_n is min, Th_ceil(n/2) is majority
 # the only aggregate that takes a second argument, the caller has to supply k
+# example: (T, T, F) with k=2 gives True, with k=3 gives False
+# example: k=0 and k>n both raise ValueError
 def threshold(group: Group, k: int) -> bool:
     if k < 1:
         raise ValueError(f"the threshold k must be at least 1, got {k}")

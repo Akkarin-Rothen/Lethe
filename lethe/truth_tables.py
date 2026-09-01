@@ -12,10 +12,13 @@ from .syntax import Assignment, Formula, signature
 
 # position i belongs to atom_names[i], only correct because signature() sorts
 # a tuple and not a list, only a tuple can be a dict key or a set element
+# example: (False, True, True) for the atoms ('a', 'b', 'c')
 Interpretation = tuple[bool, ...]
 
 # gives back a list of tuples with every possible truth value combination for that many atoms
 # needed by TruthTable.build, it produces the rows of the table
+# example: 2 gives [(F,F), (F,T), (T,F), (T,T)]
+# example: 0 gives [()], one row, because 2 ** 0 is 1
 def create_truth_value_combinations(size: int) -> list[Interpretation]:
     if size < 0:
         raise ValueError("the number of atoms cannot be negative")
@@ -30,6 +33,8 @@ def create_truth_value_combinations(size: int) -> list[Interpretation]:
 
 # pairs the atoms with their truth values, the form Formula.evaluate needs
 # needed by TruthTable.build and later by marginalization.py
+# example: ('a','b','c') and (T,F,T) give {'a': T, 'b': F, 'c': T}
+# example: two names and three values raise ValueError
 def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assignment:
     # zip stops at the shorter input and says nothing
     if len(atoms) != len(truth_values):
@@ -46,10 +51,13 @@ def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assig
 class TruthTable:
     formula: Formula
     # alphabetically sorted, so atom_names[i] always belongs to position i of every row
+    # example: ('a', 'b', 'c')
     atom_names: tuple[str, ...]
     # every truth value combination over atom_names, one per table row
+    # example: ((F,F,F), (F,F,T), ... , (T,T,T)), eight rows for three atoms
     rows: tuple[Interpretation, ...]
     # the truth value of the formula per row, values[i] belongs to rows[i]
+    # example: (F,F,F,T,F,T,F,T) for (a | b) & c
     values: tuple[bool, ...]
 
     # builds the finished table from a formula
@@ -57,6 +65,9 @@ class TruthTable:
     # @classmethod changes what the first parameter in the function is.
     # We want it to be "cls", the class itself. Without it the first parameter in a function in a class is always "self"
     @classmethod
+    # example: build((a | b) & c) gives 8 rows over ('a','b','c')
+    # example: build(TOP, ('a',)) gives 2 rows, the constant forced over one atom
+    # example: build(a & b, ('a',)) raises ValueError, b is not covered
     def build(cls, formula: Formula, atom_names: tuple[str, ...] | None = None) -> TruthTable:
         if atom_names is None:
             atom_names = signature(formula)
@@ -76,16 +87,21 @@ class TruthTable:
         return cls(formula, atom_names, rows, tuple(values))
 
     # defines what len() does when it is called with len(<TruthTable_obj>)
+    # example: three atoms give 8
     def __len__(self) -> int:
         return len(self.rows)
 
     # counts how many rows are true, True is 1 in Python so sum works
+    # example: (a | b) & c gives 3 of 8
     def true_rows(self) -> int:
         return sum(self.values)
 
 
 # true if both formulas have the same models
 # needed to show that a forgotten formula still means the same
+# example: a > b and !a | b are equivalent
+# example: a and a & (b | !b) are equivalent, b is forced into both tables
+# example: a | b and a are not
 def equivalent(left: Formula, right: Formula) -> bool:
     # both tables need the same signature, else the rows do not line up
     shared_atom_names = tuple(sorted(left.atoms() | right.atoms()))

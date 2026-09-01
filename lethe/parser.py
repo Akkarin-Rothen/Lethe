@@ -28,6 +28,7 @@ from .syntax import (
 # (?P<const>[01]) to get constants "true/1" and "false/0"
 # (?P<op>[!&|>=()]) to get operators  ! & | > = ( )
 # (?P<unicode>[¬∧∨→↔⊤⊥]) to get unicode chars  ¬ ∧ ∨ → ↔ ⊤ ⊥
+# example: "(a|1)&c" is cut into ( a | 1 ) & c, seven tokens
 _TOKEN_PATTERN = re.compile(
     r"(?P<space>\s+)|(?P<atom>[A-Za-z][0-9]*)|(?P<const>[01])|(?P<op>[!&|>=()])|(?P<unicode>[¬∧∨→↔⊤⊥])"
 )
@@ -35,6 +36,7 @@ _TOKEN_PATTERN = re.compile(
 # Accept the mathematical symbols as well, so formulas can be copied out of the thesis without rewriting them.
 # Mapping them for calculations
 # The editor flags the unicode keys as ambiguous characters. That warning is irrelevant here.
+# example: "(a∨b)∧c" is read like "(a|b)&c"
 _UNICODE_ALIASES = {
     "¬": "!",  # not
     "∧": "&",  # and
@@ -57,6 +59,8 @@ class _Token:
     text: str
     position: int
 
+# example: "a&b" gives the tokens atom a, op &, atom b
+# example: "a $ b" raises ParseError, $ is no token
 def _tokenize(text: str) -> list[_Token]:
     # empty token list, returned at the end
     tokens: list[_Token] = []
@@ -103,6 +107,7 @@ class _Parser:
 
     # gives the next token without moving the read position
     # returns None at the end of the list, that is not an error here
+    # example: at the start of "a&b" it gives the atom a and does not move on
     def _peek(self) -> _Token | None:
         if self._index < len(self._tokens):
             return self._tokens[self._index]
@@ -110,6 +115,8 @@ class _Parser:
 
     # moves one step forward only if the next token is that operator
     # returns False and changes nothing otherwise
+    # example: on "&b" with symbol "&" it gives True and moves one step
+    # example: on "&b" with symbol "|" it gives False and stays put
     def _consume_operator(self, symbol: str) -> bool:
         token = self._peek()
         if token is not None and token.kind == "op" and token.text == symbol:
@@ -118,6 +125,8 @@ class _Parser:
         return False
 
     # rejects an empty list, builds the tree, then rejects leftover tokens
+    # example: "(a|b)&c" gives And(Or(Atom(a), Atom(b)), Atom(c))
+    # example: "a b" raises ParseError, b is left over
     def parse(self) -> Formula:
         if not self._tokens:
             raise ParseError("empty formula")
@@ -133,6 +142,7 @@ class _Parser:
 
     # = binds weakest, so this is the first rule
     # the while loop makes = left-associative: a = b = c gives (a = b) = c
+    # example: a = b = c gives (a = b) = c
     def _iff(self) -> Formula:
         formula = self._implies()
         while self._consume_operator("="):
@@ -140,6 +150,7 @@ class _Parser:
         return formula
 
     # the call to itself makes > right-associative: a > b > c gives a > (b > c)
+    # example: a > b > c gives a > (b > c)
     def _implies(self) -> Formula:
         formula = self._disjunction()
         if self._consume_operator(">"):
@@ -148,6 +159,7 @@ class _Parser:
 
     # & binds tighter, so _conjunction runs first and takes its tokens
     # that is how a | b & c gives a | (b & c)
+    # example: a | b | c gives (a | b) | c
     def _disjunction(self) -> Formula:
         formula = self._conjunction()
         while self._consume_operator("|"):
@@ -155,6 +167,7 @@ class _Parser:
         return formula
 
     # same shape one level down, ! binds tighter than &
+    # example: a & b & c gives (a & b) & c
     def _conjunction(self) -> Formula:
         formula = self._negation()
         while self._consume_operator("&"):
@@ -162,6 +175,7 @@ class _Parser:
         return formula
 
     # calls itself again, so !!a works
+    # example: !!a gives Not(Not(Atom(a)))
     def _negation(self) -> Formula:
         if self._consume_operator("!"):
             return Not(self._negation())
@@ -169,6 +183,8 @@ class _Parser:
 
     # builds the leaves: atoms, constants and brackets
     # the only rule that can reject a token
+    # example: "a" gives Atom(a), "1" gives TOP, "(a|b)" gives the Or inside
+    # example: "(a" raises ParseError and names the position of the open bracket
     def _primary(self) -> Formula:
         token = self._peek()
         if token is None:
@@ -200,5 +216,7 @@ class _Parser:
 
 # runs both stages, the tokenizer and the parser
 # a new _Parser per call, because _index would keep the old read position
+# example: parse("(a|b)&c") gives the tree, and str() of it gives "(a | b) & c"
+# example: parse("1") is TOP, the same object every time
 def parse(text: str) -> Formula:
     return _Parser(_tokenize(text), text).parse()
