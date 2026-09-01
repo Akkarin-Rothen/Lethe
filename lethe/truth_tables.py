@@ -10,15 +10,15 @@ from dataclasses import dataclass
 # Import type alias Assignment, class Formula and function signature from syntax.py
 from .syntax import Assignment, Formula, signature
 
-# position i belongs to sigma[i], only correct because signature() sorts
+# position i belongs to atom_names[i], only correct because signature() sorts
 # a tuple and not a list, only a tuple can be a dict key or a set element
 Interpretation = tuple[bool, ...]
 
-# gives back a list of tuples with every possible truth value combination for a signature of that size
+# gives back a list of tuples with every possible truth value combination for that many atoms
 # needed by TruthTable.build, it produces the rows of the table
 def create_truth_value_combinations(size: int) -> list[Interpretation]:
     if size < 0:
-        raise ValueError("a signature cannot have a negative size")
+        raise ValueError("the number of atoms cannot be negative")
     # itertools.product() returns the Cartesian product.
     # The Cartesian product gives an ordered list of all possible combinations of for each input
     # a={a,b} and b={1,2} will yield {a,1},{a,2},{b,1},{b,2}
@@ -34,8 +34,7 @@ def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assig
     # zip stops at the shorter input and says nothing
     if len(atoms) != len(truth_values):
         raise ValueError(
-            f"interpretation of length {len(truth_values)} does not fit signature "
-            f"of size {len(atoms)}"
+            f"{len(truth_values)} truth values do not fit {len(atoms)} atoms"
         )
     # zip combines the given tuples. zip(('a','b','c'), (True, False, True)) returns [('a', True), ('b', False), ('c', True)]
     # That matches the Assignment from syntax.py
@@ -46,35 +45,35 @@ def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assig
 @dataclass(frozen=True)
 class TruthTable:
     formula: Formula
-    # alphabetically sorted, so sigma[i] always belongs to position i of every row
-    sigma: tuple[str, ...]
-    # every truth value combination over sigma, one per table row
+    # alphabetically sorted, so atom_names[i] always belongs to position i of every row
+    atom_names: tuple[str, ...]
+    # every truth value combination over atom_names, one per table row
     rows: tuple[Interpretation, ...]
     # the truth value of the formula per row, values[i] belongs to rows[i]
     values: tuple[bool, ...]
 
     # builds the finished table from a formula
-    # sigma can be larger than the atoms of the formula, then the table gets more rows
+    # atom_names can be larger than the atoms of the formula, then the table gets more rows
     # @classmethod changes what the first parameter in the function is.
     # We want it to be "cls", the class itself. Without it the first parameter in a function in a class is always "self"
     @classmethod
-    def build(cls, formula: Formula, sigma: tuple[str, ...] | None = None) -> TruthTable:
-        if sigma is None:
-            sigma = signature(formula)
+    def build(cls, formula: Formula, atom_names: tuple[str, ...] | None = None) -> TruthTable:
+        if atom_names is None:
+            atom_names = signature(formula)
         else:
-            sigma = tuple(sigma)
-        missing = formula.atoms() - set(sigma)
+            atom_names = tuple(atom_names)
+        missing = formula.atoms() - set(atom_names)
         if missing:
             raise ValueError(
-                f"signature {sigma} does not cover the atoms "
+                f"the atoms {atom_names} do not cover "
                 f"{sorted(missing)} of the formula"
             )
-        rows = tuple(create_truth_value_combinations(len(sigma)))
+        rows = tuple(create_truth_value_combinations(len(atom_names)))
         values = []
         for truth_values in rows:
-            assignment = as_assignment(sigma, truth_values)
+            assignment = as_assignment(atom_names, truth_values)
             values.append(formula.evaluate(assignment))
-        return cls(formula, sigma, rows, tuple(values))
+        return cls(formula, atom_names, rows, tuple(values))
 
     # defines what len() does when it is called with len(<TruthTable_obj>)
     def __len__(self) -> int:
@@ -89,7 +88,7 @@ class TruthTable:
 # needed to show that a forgotten formula still means the same
 def equivalent(left: Formula, right: Formula) -> bool:
     # both tables need the same signature, else the rows do not line up
-    joint_sigma = tuple(sorted(left.atoms() | right.atoms()))
-    left_table = TruthTable.build(left, joint_sigma)
-    right_table = TruthTable.build(right, joint_sigma)
+    shared_atom_names = tuple(sorted(left.atoms() | right.atoms()))
+    left_table = TruthTable.build(left, shared_atom_names)
+    right_table = TruthTable.build(right, shared_atom_names)
     return left_table.values == right_table.values

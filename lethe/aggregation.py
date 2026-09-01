@@ -5,11 +5,15 @@
 from __future__ import annotations
 
 # Sequence is used to annotate something with a length and an index
-from typing import Sequence
+# Callable is used to annotate a function that is passed around as a value
+from typing import Callable, Sequence
 
 # the truth values of one group, one per row
 # Sequence and not Iterable, because majority needs len()
 Group = Sequence[bool]
+
+# what every aggregate looks like from outside: one group in, one truth value out
+Aggregate = Callable[[Group], bool]
 
 
 # true if at least one value in the group is true
