@@ -96,7 +96,6 @@ class ForgetResult:
         return self.agrees_with_var_forget("maximum")
 
 
-
 def model_marginalization(
     models: Iterable[Interpretation],
     atom_names: Sequence[str],
@@ -108,7 +107,6 @@ def model_marginalization(
     for row in models:
         projected.add(_key_of(row, positions))
     return projected
-
 
 
 # forgets atoms both ways and puts both results in one ForgetResult
@@ -147,9 +145,7 @@ def forget(
         if atom not in atom_names:
             unknown.append(atom)
     if unknown:
-        raise ValueError(
-            f"cannot forget {unknown}, the formula only has {atom_names}"
-        )
+        raise ValueError(f"cannot forget {unknown}, the formula only has {atom_names}")
 
     # walks atom_names, so kept stays alphabetical
     # example: atom_names ('a','b','c') minus forgotten ('b','c') gives ('a',)
@@ -160,9 +156,7 @@ def forget(
     kept = tuple(kept)
 
     if not kept:
-        raise ValueError(
-            "forgetting every atom leaves nothing to group by"
-        )
+        raise ValueError("forgetting every atom leaves nothing to group by")
 
     table = TruthTable.build(formula, atom_names)
     groups = _group_rows(table, kept)
@@ -176,7 +170,6 @@ def forget(
         for group in groups:
             values.append(aggregate(group.values))
         aggregated[aggregate.__name__] = tuple(values)
-
 
     # build the reference table over kept, not over its own atoms
     # the constant 1 has one row on its own, but two over kept = ('a',)
@@ -196,7 +189,6 @@ def forget(
         var_forget_formula=forgotten_formula,
         var_forget_values=reference.values,
     )
-
 
 
 # where the kept atoms sit in a row

@@ -50,8 +50,6 @@ def threshold(group: Group, k: int) -> bool:
     if k < 1:
         raise ValueError(f"the threshold k must be at least 1, got {k}")
     elif k > len(group):
-        raise ValueError(
-            f"threshold k={k} exceeds the group size n={len(group)}"
-        )
+        raise ValueError(f"threshold k={k} exceeds the group size n={len(group)}")
 
     return sum(group) >= k

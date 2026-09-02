@@ -18,6 +18,7 @@ from .syntax import (
     TOP,
 )
 
+
 # substitutes the atom for the truth value TOP or BOTTOM
 # example: substitute((a | b) & c, 'c', True) gives (a | b) & 1
 def substitute(formula: Formula, atom: str, value: bool) -> Formula:
@@ -41,6 +42,7 @@ def var_forget(formula: Formula, atoms_to_forget: Iterable[str]) -> Formula:
             Or(substitute(result, atom, True), substitute(result, atom, False))
         )
     return result
+
 
 # simplifies a whole formula tree
 # the function calls itself on the children first, then folds the node
@@ -88,7 +90,9 @@ def simplify(formula: Formula) -> Formula:
 #   X = X gives 1
 # an unknown class raises TypeError
 # example: node_type Or with left 1 gives 1, with left 0 gives the right side
-def _simplify_binary(node_type: type[Formula], left: Formula, right: Formula) -> Formula:
+def _simplify_binary(
+    node_type: type[Formula], left: Formula, right: Formula
+) -> Formula:
     if node_type is And:
         return _simplify_and(left, right)
     if node_type is Or:
@@ -124,6 +128,7 @@ def _simplify_binary(node_type: type[Formula], left: Formula, right: Formula) ->
             return TOP
         return Iff(left, right)
     raise TypeError(f"cannot simplify {node_type!r}")
+
 
 # simplifies one And node
 # both children are already simple when this function runs
@@ -183,14 +188,18 @@ def _simplify_or(left: Formula, right: Formula) -> Formula:
         return right
     return Or(left, right)
 
+
 # true if the two formulas are X and !X, in either order
 # the goal is to fold them away: a | !a becomes 1, a & !a becomes 0
 # left is !a, left.negated is a and right is a, then true
 # the same the other way round: right is !a, right.negated is a and left is a
 def _complementary(left: Formula, right: Formula) -> bool:
-    if (isinstance(left, Not) and left.negated == right) or (isinstance(right, Not) and right.negated == left):
+    if (isinstance(left, Not) and left.negated == right) or (
+        isinstance(right, Not) and right.negated == left
+    ):
         return True
     return False
+
 
 # true if inner is a conjunction and outer is one of its parts
 # the goal is to drop the longer side: a | (a & b) becomes a
@@ -209,4 +218,3 @@ def _conjuncts(formula: Formula) -> list[Formula]:
         # recursion because: And holds two children, and each child can be another And, at any depth
         return _conjuncts(formula.left) + _conjuncts(formula.right)
     return [formula]
-

@@ -4,8 +4,10 @@
 
 # For error-free use of annotations
 from __future__ import annotations
+
 # imports RegEx
 import re
+
 # helps to work with classes because it constructs default functions like __init__
 from dataclasses import dataclass
 
@@ -20,7 +22,6 @@ from .syntax import (
     Or,
     TOP,
 )
-
 
 # Named capture groups.
 # (?P<space>\s+) to filter out whitespace
@@ -47,6 +48,7 @@ _UNICODE_ALIASES = {
     "⊥": "0",  # bottom
 }
 
+
 # raised when an input string is not a well formed formula
 # the class body is empty, pass is the placeholder Python needs
 class ParseError(ValueError):
@@ -58,6 +60,7 @@ class _Token:
     kind: str  # "atom", "const" or "op"
     text: str
     position: int
+
 
 # example: "a&b" gives the tokens atom a, op &, atom b
 # example: "a $ b" raises ParseError, $ is no token
@@ -210,9 +213,8 @@ class _Parser:
                     f"{token.position}"
                 )
             return inner
-        raise ParseError(
-            f"unexpected {token.text!r} at position {token.position}"
-        )
+        raise ParseError(f"unexpected {token.text!r} at position {token.position}")
+
 
 # runs both stages, the tokenizer and the parser
 # a new _Parser per call, because _index would keep the old read position

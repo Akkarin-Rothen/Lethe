@@ -2,8 +2,10 @@
 
 # For error-free use of annotations
 from __future__ import annotations
+
 # provides tool for iterations
 import itertools
+
 # helps to work with classes because it constructs default functions like __init__
 from dataclasses import dataclass
 
@@ -14,6 +16,7 @@ from .syntax import Assignment, Formula, signature
 # a tuple and not a list, only a tuple can be a dict key or a set element
 # example: (False, True, True) for the atoms ('a', 'b', 'c')
 Interpretation = tuple[bool, ...]
+
 
 # gives back a list of tuples with every possible truth value combination for that many atoms
 # needed by TruthTable.build, it produces the rows of the table
@@ -45,6 +48,7 @@ def as_assignment(atoms: tuple[str, ...], truth_values: Interpretation) -> Assig
     # That matches the Assignment from syntax.py
     return dict(zip(atoms, truth_values))
 
+
 # holds the complete truth table of one formula over a fixed signature
 # everything later builds on it: the formula catalog, the forgetting and both renderers
 @dataclass(frozen=True)
@@ -68,7 +72,9 @@ class TruthTable:
     # example: build((a | b) & c) gives 8 rows over ('a','b','c')
     # example: build(TOP, ('a',)) gives 2 rows, the constant forced over one atom
     # example: build(a & b, ('a',)) raises ValueError, b is not covered
-    def build(cls, formula: Formula, atom_names: tuple[str, ...] | None = None) -> TruthTable:
+    def build(
+        cls, formula: Formula, atom_names: tuple[str, ...] | None = None
+    ) -> TruthTable:
         if atom_names is None:
             atom_names = signature(formula)
         else:

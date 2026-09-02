@@ -11,6 +11,7 @@ from .parser import parse
 from .truth_tables import TruthTable
 from .syntax import Formula
 
+
 # one formula of the catalog
 @dataclass(frozen=True)
 class CatalogEntry:

@@ -3,8 +3,10 @@
 
 # For error-free use of annotations
 from __future__ import annotations
+
 # helps to work with classes because it constructs default functions like __init__
 from dataclasses import dataclass
+
 # Mapping is used for key, value data structures
 # ClassVar is used for class variables that belong to the class and not to every single object
 from typing import ClassVar, Mapping
@@ -23,7 +25,6 @@ _PREC_AND = 3
 _PREC_OR = 2
 _PREC_IMPLIES = 1
 _PREC_IFF = 0
-
 
 
 # Base class for other classes to inherit from
@@ -65,12 +66,13 @@ class Formula:
         # parens_on_equal is used to prevent (a>b)>c from being printed as a > b > c
         # < is used because the = case is handled on the or case
         # parens_on_equal is set on a rendering call
-        needs = child.precedence < self.precedence or (parens_on_equal and child.precedence == self.precedence )
+        needs = child.precedence < self.precedence or (
+            parens_on_equal and child.precedence == self.precedence
+        )
         if needs:
             return f"({text})"
         else:
             return text
-
 
 
 # apply dataclass to Atom and make it unchangeable
@@ -154,6 +156,7 @@ class Constant(Formula):
 TOP = Constant(True)
 BOTTOM = Constant(False)
 
+
 # goal is to replace a not with either \lnot for latex or ! for the calculation
 @dataclass(frozen=True)
 class Not(Formula):
@@ -221,7 +224,9 @@ class BinaryConnective(Formula):
             symbol = self.latex_symbol
         else:
             symbol = self.symbol
-        left = self._wrap(self.left, parens_on_equal=self.right_associative, latex=latex)
+        left = self._wrap(
+            self.left, parens_on_equal=self.right_associative, latex=latex
+        )
         right = self._wrap(
             self.right, parens_on_equal=not self.right_associative, latex=latex
         )
@@ -253,6 +258,7 @@ class Or(BinaryConnective):
     def evaluate(self, assignment: Assignment) -> bool:
         return self.left.evaluate(assignment) or self.right.evaluate(assignment)
 
+
 @dataclass(frozen=True)
 class Implies(BinaryConnective):
     symbol: ClassVar[str] = ">"
@@ -264,9 +270,7 @@ class Implies(BinaryConnective):
     # material implication, written as !a | b
     # false in one case only: left true and right false
     def evaluate(self, assignment: Assignment) -> bool:
-        return (not self.left.evaluate(assignment)) or self.right.evaluate(
-            assignment
-        )
+        return (not self.left.evaluate(assignment)) or self.right.evaluate(assignment)
 
 
 @dataclass(frozen=True)
