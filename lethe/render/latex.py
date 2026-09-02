@@ -1,6 +1,6 @@
-# latex.py renders truth tables as LaTeX, ready to be pasted into a document.
-# the module has no logic of its own, everything it prints is already computed.
-# the tables need only tabular and \rowcolor from xcolor with the table option.
+# latex.py prints truth tables as LaTeX, ready to paste into a document.
+# it computes nothing, it only formats.
+# the output needs tabular and \rowcolor from xcolor with the table option.
 
 # For error-free use of annotations
 from __future__ import annotations
@@ -8,9 +8,8 @@ from __future__ import annotations
 from ..marginalization import ForgetResult
 from ..truth_tables import TruthTable
 
-# one colour per group, used in turn
-# example: with two groups the rows are gray!40 and blue!40
-# more groups than colours start again at the front
+# one colour per group, used in turn and starting again at the front
+# example: two groups give gray!40 and blue!40
 GROUP_COLOURS = ("gray!40", "blue!40", "red!40", "green!40", "yellow!40")
 
 EMPTY = ""
@@ -25,7 +24,7 @@ def _cell(value: bool) -> str:
         return "0"
 
 
-# a whole row of truth values as cells
+# a whole row as cells
 # example: (F, T, T) gives ["0", "1", "1"]
 def _cells(values) -> list[str]:
     cells = []
@@ -34,7 +33,7 @@ def _cells(values) -> list[str]:
     return cells
 
 
-# a cell that is only filled in the last row of a group, else it stays empty
+# only the last row of a group gets the value, the others stay empty
 # example: True with last=True gives "1", with last=False gives ""
 def _only_last(value: bool, last: bool) -> str:
     if last:
@@ -45,25 +44,25 @@ def _only_last(value: bool, last: bool) -> str:
 
 # wraps text in \textbf
 # example: "a" gives \textbf{a}
-# the doubled braces in the f-string are one literal brace each
+# {{ and }} in the f-string are one brace each
 def _bold(text: str) -> str:
     return rf"\textbf{{{text}}}"
 
 
-# builds the column specification from the number of columns
+# the column specification
 # example: 3 atoms and 2 extra columns give |ccc|c|c|c|
 def _column_spec(atom_count: int, extra: int) -> str:
     return "|" + "c" * atom_count + "|c|" + "c|" * extra
 
 
-# joins the cells of one row and closes it the way LaTeX wants
+# joins the cells and closes the row
 # example: ["0", "1"] gives "0 & 1 \\ \hline"
 def _row(cells: list[str], prefix: str = EMPTY) -> str:
     return prefix + " & ".join(cells) + r" \\ \hline"
 
 
-# builds the table frame around a header and the finished rows
-# rows are complete strings here, not lists of cells, LaTeX does the aligning
+# builds the frame around the header and the rows
+# rows are finished strings here, LaTeX does the aligning itself
 def _document(
     header: list[str],
     rows: list[str],
@@ -88,8 +87,8 @@ def _document(
     return "\n".join(lines)
 
 
-# the full truth table of one formula as a LaTeX table
-# example: (a | b) & c gives the spec |ccc|c| and eight data rows
+# the full truth table of one formula
+# example: (a | b) & c gives the spec |ccc|c| and eight rows
 def truth_table(
     table: TruthTable,
     *,
@@ -107,7 +106,7 @@ def truth_table(
         cells.append(_cell(value))
         rows.append(_row(cells))
 
-    # to_latex, not str, so the caption reads (a \lor b) \land c
+    # to_latex, not str, so it reads (a \lor b) \land c
     if caption is None:
         caption = f"Truth table for ${table.formula.to_latex()}$."
 
@@ -120,10 +119,10 @@ def truth_table(
     )
 
 
-# the grouped truth table after forgetting as a LaTeX table
+# the grouped truth table after forgetting
 # the forgotten atoms keep their column, only the cells are emptied
-# an aggregated value belongs to a whole group, so it is printed once, in the last row
-# every group gets its own row colour, unless colour_groups is False
+# an aggregated value belongs to the whole group, so it stands in the last row
+# every group gets its own colour, unless colour_groups is False
 # example: forgetting b and c from (a | b) & c gives the spec |ccc|c|c|c|c|
 def forget_table(
     result: ForgetResult,
@@ -133,8 +132,8 @@ def forget_table(
     colour_groups: bool = True,
     show_var_forget: bool = True,
 ) -> str:
-    # True for every atom that is kept, False for every forgotten one
-    # example: atom_names ('a','b','c') with kept ('a',) gives [True, False, False]
+    # True for a kept atom, False for a forgotten one
+    # example: ('a','b','c') with kept ('a',) gives [True, False, False]
     keep = []
     for atom in result.atom_names:
         keep.append(atom in result.kept)
@@ -154,7 +153,7 @@ def forget_table(
 
     rows = []
     for position, group in enumerate(result.groups):
-        # % starts again at the front when there are more groups than colours
+        # % wraps around when there are more groups than colours
         colour = GROUP_COLOURS[position % len(GROUP_COLOURS)]
         if colour_groups:
             prefix = rf"\rowcolor{{{colour}}} "
