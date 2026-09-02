@@ -121,8 +121,8 @@ def forget_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
         else:
             header.append(EMPTY)
     header.append(str(result.formula))
-    for aggregate in result.aggregates:
-        header.append(aggregate.__name__)
+    for name in result.column_names():
+        header.append(name)
     if show_var_forget:
         header.append("VarForget")
 
@@ -139,8 +139,8 @@ def forget_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
                     cells.append(EMPTY)
             cells.append(_cell(group.values[index]))
 
-            for aggregate in result.aggregates:
-                value = result.values_of(aggregate.__name__)[position]
+            for name in result.column_names():
+                value = result.values_of(name)[position]
                 cells.append(_only_last(value, last))
 
             if show_var_forget:
@@ -161,10 +161,10 @@ def summary(result: ForgetResult) -> str:
         f"group size     {result.group_size()}",
         f"VarForget      {result.var_forget_formula}",
     ]
-    for aggregate in result.aggregates:
-        if result.agrees_with_var_forget(aggregate.__name__):
+    for name in result.column_names():
+        if result.agrees_with_var_forget(name):
             verdict = "agrees with"
         else:
             verdict = "differs from"
-        lines.append(f"  {aggregate.__name__:<10} {verdict} VarForget")
+        lines.append(f"  {name:<10} {verdict} VarForget")
     return "\n".join(lines)
