@@ -9,7 +9,7 @@ import itertools
 from dataclasses import dataclass
 from typing import Iterable, Sequence
 
-from .aggregation import Aggregate, maximum
+from .aggregation import Aggregate, maximum, threshold
 from .forgetting import var_forget
 from .syntax import Formula, signature
 from .truth_tables import Interpretation, TruthTable
@@ -64,6 +64,10 @@ class ForgetResult:
     # the aggregates this run used
     # example: (maximum, minimum, majority)
     aggregates: tuple[Aggregate, ...]
+    # the k values of the thresholds this run used
+    # threshold takes k as a second argument, so it cannot go into aggregates
+    # example: (1, 2, 3, 4) for a group size of 4
+    thresholds: tuple[int, ...]
     # per aggregate one truth value per group
     # example: {'maximum': (T, T), 'minimum': (F, F), 'majority': (F, T)}
     aggregated: dict[str, tuple[bool, ...]]
@@ -78,6 +82,16 @@ class ForgetResult:
     # example: forgetting ('b', 'c') gives 4
     def group_size(self) -> int:
         return 2 ** len(self.forgotten)
+
+    # the name of every aggregated column, in the order they were computed
+    # example: ['maximum', 'minimum', 'majority', 'th1', 'th2']
+    def column_names(self) -> list[str]:
+        names = []
+        for aggregate in self.aggregates:
+            names.append(aggregate.__name__)
+        for k in self.thresholds:
+            names.append(f"th{k}")
+        return names
 
     # the values of one aggregate, one per group
     # the name is the function name, for example maximum
@@ -126,6 +140,7 @@ def forget(
     formula: Formula,
     forgotten: Iterable[str],
     aggregates: Sequence[Aggregate] = (maximum,),
+    thresholds: Sequence[int] = (),
     atom_names: tuple[str, ...] | None = None,
 ) -> ForgetResult:
     if atom_names is None:
@@ -171,6 +186,15 @@ def forget(
             values.append(aggregate(group.values))
         aggregated[aggregate.__name__] = tuple(values)
 
+    # thresholds need k, so they get their own loop and their own key
+    # example: k=2 lands under 'th2'
+    thresholds = tuple(thresholds)
+    for k in thresholds:
+        values = []
+        for group in groups:
+            values.append(threshold(group.values, k))
+        aggregated[f"th{k}"] = tuple(values)
+
     # build the reference table over kept, not over its own atoms
     # the constant 1 has one row on its own, but two over kept = ('a',)
     # example: var_forget((a | b) & c, ('b','c')) is 1, its values are (T, T)
@@ -185,6 +209,7 @@ def forget(
         table=table,
         groups=groups,
         aggregates=aggregates,
+        thresholds=thresholds,
         aggregated=aggregated,
         var_forget_formula=forgotten_formula,
         var_forget_values=reference.values,
