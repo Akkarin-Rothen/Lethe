@@ -145,8 +145,8 @@ def forget_table(
         else:
             header.append(_bold(EMPTY))
     header.append(_bold("A"))
-    for aggregate in result.aggregates:
-        header.append(_bold(rf"$\mathrm{{ModMg}}_{{{aggregate.__name__}}}$"))
+    for name in result.column_names():
+        header.append(_bold(rf"$\mathrm{{ModMg}}_{{{name}}}$"))
     if show_var_forget:
         forgotten = ", ".join(result.forgotten)
         header.append(_bold(rf"$\text{{VarForget}}(A, \{{{forgotten}\}})$"))
@@ -171,8 +171,8 @@ def forget_table(
                     cells.append(EMPTY)
             cells.append(_cell(group.values[index]))
 
-            for aggregate in result.aggregates:
-                value = result.values_of(aggregate.__name__)[position]
+            for name in result.column_names():
+                value = result.values_of(name)[position]
                 cells.append(_only_last(value, last))
 
             if show_var_forget:
@@ -180,7 +180,7 @@ def forget_table(
 
             rows.append(_row(cells, prefix))
 
-    extra = len(result.aggregates)
+    extra = len(result.column_names())
     if show_var_forget:
         extra = extra + 1
 
