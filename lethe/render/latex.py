@@ -1,0 +1,202 @@
+# latex.py renders truth tables as LaTeX, ready to be pasted into a document.
+# the module has no logic of its own, everything it prints is already computed.
+# the tables need only tabular and \rowcolor from xcolor with the table option.
+
+# For error-free use of annotations
+from __future__ import annotations
+
+from ..marginalization import ForgetResult
+from ..truth_tables import TruthTable
+
+# one colour per group, used in turn
+# example: with two groups the rows are gray!40 and blue!40
+# more groups than colours start again at the front
+GROUP_COLOURS = ("gray!40", "blue!40", "red!40", "green!40", "yellow!40")
+
+EMPTY = ""
+
+
+# one truth value as a single character
+# example: True gives "1", False gives "0"
+def _cell(value: bool) -> str:
+    if value:
+        return "1"
+    else:
+        return "0"
+
+
+# a whole row of truth values as cells
+# example: (F, T, T) gives ["0", "1", "1"]
+def _cells(values) -> list[str]:
+    cells = []
+    for value in values:
+        cells.append(_cell(value))
+    return cells
+
+
+# a cell that is only filled in the last row of a group, else it stays empty
+# example: True with last=True gives "1", with last=False gives ""
+def _only_last(value: bool, last: bool) -> str:
+    if last:
+        return _cell(value)
+    else:
+        return EMPTY
+
+
+# wraps text in \textbf
+# example: "a" gives \textbf{a}
+# the doubled braces in the f-string are one literal brace each
+def _bold(text: str) -> str:
+    return rf"\textbf{{{text}}}"
+
+
+# builds the column specification from the number of columns
+# example: 3 atoms and 2 extra columns give |ccc|c|c|c|
+def _column_spec(atom_count: int, extra: int) -> str:
+    return "|" + "c" * atom_count + "|c|" + "c|" * extra
+
+
+# joins the cells of one row and closes it the way LaTeX wants
+# example: ["0", "1"] gives "0 & 1 \\ \hline"
+def _row(cells: list[str], prefix: str = EMPTY) -> str:
+    return prefix + " & ".join(cells) + r" \\ \hline"
+
+
+# builds the table frame around a header and the finished rows
+# rows are complete strings here, not lists of cells, LaTeX does the aligning
+def _document(
+    header: list[str],
+    rows: list[str],
+    *,
+    column_spec: str,
+    caption: str,
+    label: str,
+) -> str:
+    lines = [
+        r"\begin{table}[ht]",
+        r"    \centering",
+        rf"    \begin{{tabular}}{{{column_spec}}}",
+        r"        \hline",
+        "        " + _row(header),
+    ]
+    for row in rows:
+        lines.append("        " + row)
+    lines.append(r"    \end{tabular}")
+    lines.append(rf"    \caption{{{caption}}}")
+    lines.append(rf"    \label{{{label}}}")
+    lines.append(r"\end{table}")
+    return "\n".join(lines)
+
+
+# the full truth table of one formula as a LaTeX table
+# example: (a | b) & c gives the spec |ccc|c| and eight data rows
+def truth_table(
+    table: TruthTable,
+    *,
+    caption: str | None = None,
+    label: str = "tab:truthtab",
+) -> str:
+    header = []
+    for atom in table.atom_names:
+        header.append(_bold(atom))
+    header.append(_bold("A"))
+
+    rows = []
+    for row, value in zip(table.rows, table.values):
+        cells = _cells(row)
+        cells.append(_cell(value))
+        rows.append(_row(cells))
+
+    # to_latex, not str, so the caption reads (a \lor b) \land c
+    if caption is None:
+        caption = f"Truth table for ${table.formula.to_latex()}$."
+
+    return _document(
+        header,
+        rows,
+        column_spec=_column_spec(len(table.atom_names), 0),
+        caption=caption,
+        label=label,
+    )
+
+
+# the grouped truth table after forgetting as a LaTeX table
+# the forgotten atoms keep their column, only the cells are emptied
+# an aggregated value belongs to a whole group, so it is printed once, in the last row
+# every group gets its own row colour, unless colour_groups is False
+# example: forgetting b and c from (a | b) & c gives the spec |ccc|c|c|c|c|
+def forget_table(
+    result: ForgetResult,
+    *,
+    caption: str | None = None,
+    label: str = "tab:truthtabforg",
+    colour_groups: bool = True,
+    show_var_forget: bool = True,
+) -> str:
+    # True for every atom that is kept, False for every forgotten one
+    # example: atom_names ('a','b','c') with kept ('a',) gives [True, False, False]
+    keep = []
+    for atom in result.atom_names:
+        keep.append(atom in result.kept)
+
+    header = []
+    for atom, shown in zip(result.atom_names, keep):
+        if shown:
+            header.append(_bold(atom))
+        else:
+            header.append(_bold(EMPTY))
+    header.append(_bold("A"))
+    for aggregate in result.aggregates:
+        header.append(_bold(rf"$\mathrm{{ModMg}}_{{{aggregate.__name__}}}$"))
+    if show_var_forget:
+        forgotten = ", ".join(result.forgotten)
+        header.append(_bold(rf"$\text{{VarForget}}(A, \{{{forgotten}\}})$"))
+
+    rows = []
+    for position, group in enumerate(result.groups):
+        # % starts again at the front when there are more groups than colours
+        colour = GROUP_COLOURS[position % len(GROUP_COLOURS)]
+        if colour_groups:
+            prefix = rf"\rowcolor{{{colour}}} "
+        else:
+            prefix = EMPTY
+
+        for index, row in enumerate(group.rows):
+            last = index == group.size() - 1
+
+            cells = []
+            for bit, shown in zip(row, keep):
+                if shown:
+                    cells.append(_cell(bit))
+                else:
+                    cells.append(EMPTY)
+            cells.append(_cell(group.values[index]))
+
+            for aggregate in result.aggregates:
+                value = result.values_of(aggregate.__name__)[position]
+                cells.append(_only_last(value, last))
+
+            if show_var_forget:
+                cells.append(_only_last(result.var_forget_values[position], last))
+
+            rows.append(_row(cells, prefix))
+
+    extra = len(result.aggregates)
+    if show_var_forget:
+        extra = extra + 1
+
+    if caption is None:
+        forgotten = ", ".join(result.forgotten)
+        formula = result.formula.to_latex()
+        caption = (
+            rf"Forgetting $\{{{forgotten}\}}$ in $A = {formula}$. "
+            "The emptied columns mark the forgotten variables."
+        )
+
+    return _document(
+        header,
+        rows,
+        column_spec=_column_spec(len(result.atom_names), extra),
+        caption=caption,
+        label=label,
+    )
