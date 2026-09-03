@@ -59,6 +59,7 @@ CATALOG: dict[str, CatalogEntry] = {
     "F5": CatalogEntry("F5", "(a = b) = c"),
     "F6": CatalogEntry("F6", "(a & b & c) | (a & !b & c)"),
     "F7": CatalogEntry("F7", "(a | b) & (c | d) & (e | f)"),
+    "F8": CatalogEntry("F8", "a | (b & c)"),
 }
 
 
