@@ -40,7 +40,13 @@ python3 -m lethe formulas
 python3 -m lethe table F1
 python3 -m lethe table "(a|b)&c"
 python3 -m lethe table F1 --latex
+python3 -m lethe table F1 --latex -o f1.tex
 ```
+
+| Option | Meaning |
+|---|---|
+| `--latex` | Output LaTeX instead of plain text |
+| `-o`, `--out` | Write to this file instead of printing |
 
 Outputs the formula, its atoms, number of true rows, and the full truth table.  
 With `--latex`, outputs a ready-to-use `table` environment.
@@ -51,6 +57,7 @@ With `--latex`, outputs a ready-to-use `table` environment.
 python3 -m lethe forget F1 -f b,c
 python3 -m lethe forget F1 -f b,c -a all
 python3 -m lethe forget "(a|b)&c" -f b,c -a max,th2 --latex
+python3 -m lethe forget F1 -f b,c -a all --latex -o f1-forget.tex
 ```
 
 | Option | Meaning |
@@ -58,10 +65,30 @@ python3 -m lethe forget "(a|b)&c" -f b,c -a max,th2 --latex
 | `-f`, `--forget` | Required. Atoms to forget, e.g. `b,c` or `b c` |
 | `-a`, `--aggregates` | Aggregation methods, default: `max,min,majority` |
 | `--latex` | Output LaTeX instead of plain text |
+| `-o`, `--out` | Write to this file instead of printing |
 
 Output: Summary, full table before forgetting, and full table after forgetting.  
 In the second table, forgotten atoms retain their column, but cells are left empty.  
 The aggregated value appears in the last row of each group.
+
+## Writing to a file
+
+`-o` writes the output to a file and prints `wrote <name>`. It works for text
+and for LaTeX.
+
+```sh
+python3 -m lethe forget F1 -f b,c -a all --latex -o f1-forget.tex
+```
+
+Include the result instead of pasting it, so it stays up to date:
+
+```latex
+\input{f1-forget}
+```
+
+`-o` is safer than a shell redirect. On an input error nothing is written and
+an existing file keeps its content, while `>` empties the file before the
+program even starts.
 
 ## Aggregates
 

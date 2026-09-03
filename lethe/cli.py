@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 from .aggregation import Aggregate, majority, maximum, minimum
 from .formulas import CATALOG, resolve as resolve_formula
@@ -61,6 +62,18 @@ def _parse_aggregates(
 DEFAULT_AGGREGATES = "max,min,majority"
 
 
+# prints the text, or writes it to a file when -o was given
+# unlike a shell redirect this never empties an existing file on an error,
+# because the program only writes after everything worked
+# example: -o out.tex writes the file and prints "wrote out.tex"
+def _emit(output: str, out: str | None) -> None:
+    if out is None:
+        print(output)
+    else:
+        Path("out/"+out).write_text(output + "\n", encoding="utf-8")
+        print(f"wrote {out}")
+
+
 # lists the catalog, one line per formula
 # example: F1 (a | b) & c  3 atoms  3 of 8 true
 def command_formulas(args: argparse.Namespace) -> int:
@@ -82,13 +95,17 @@ def command_table(args: argparse.Namespace) -> int:
     formula = resolve_formula(args.formula)
     table = TruthTable.build(formula)
     if args.latex:
-        print(latex.truth_table(table))
-    else:
-        print(f"formula   {formula}")
-        print(f"atoms     {{{', '.join(table.atom_names)}}}")
-        print(f"true rows {table.true_rows()} of {len(table)}")
-        print()
-        print(text.truth_table(table, column=str(formula)))
+        _emit(latex.truth_table(table), args.out)
+        return 0
+
+    lines = [
+        f"formula   {formula}",
+        f"atoms     {{{', '.join(table.atom_names)}}}",
+        f"true rows {table.true_rows()} of {len(table)}",
+        "",
+        text.truth_table(table, column=str(formula)),
+    ]
+    _emit("\n".join(lines), args.out)
     return 0
 
 
@@ -104,18 +121,20 @@ def command_forget(args: argparse.Namespace) -> int:
     result = forget(formula, forgotten, aggregates, thresholds)
 
     if args.latex:
-        print(latex.truth_table(result.table))
-        print()
-        print(latex.forget_table(result))
+        lines = [latex.truth_table(result.table), "", latex.forget_table(result)]
+        _emit("\n".join(lines), args.out)
         return 0
 
-    print(text.summary(result))
-    print()
-    print("before forgetting:")
-    print(text.truth_table(result.table, column=str(formula)))
-    print()
-    print(f"after forgetting {{{', '.join(result.forgotten)}}}:")
-    print(text.forget_table(result))
+    lines = [
+        text.summary(result),
+        "",
+        "before forgetting:",
+        text.truth_table(result.table, column=str(formula)),
+        "",
+        f"after forgetting {{{', '.join(result.forgotten)}}}:",
+        text.forget_table(result),
+    ]
+    _emit("\n".join(lines), args.out)
     return 0
 
 
@@ -147,6 +166,9 @@ def build_parser() -> argparse.ArgumentParser:
     table.add_argument(
         "--latex", action="store_true", help="emit a LaTeX table instead of text"
     )
+    table.add_argument(
+        "-o", "--out", help="write to this file instead of printing"
+    )
     table.set_defaults(handler=command_table)
 
     forgetting = subparsers.add_parser(
@@ -172,6 +194,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     forgetting.add_argument(
         "--latex", action="store_true", help="emit LaTeX tables instead of text"
+    )
+    forgetting.add_argument(
+        "-o", "--out", help="write to this file instead of printing"
     )
     forgetting.set_defaults(handler=command_forget)
 
