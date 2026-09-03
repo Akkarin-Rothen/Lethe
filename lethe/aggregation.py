@@ -53,3 +53,19 @@ def threshold(group: Group, k: int) -> bool:
         raise ValueError(f"threshold k={k} exceeds the group size n={len(group)}")
 
     return sum(group) >= k
+
+
+# the short names used as column titles in the output
+# a name that is not in here is printed as it is, for example th2
+# example: "maximum" is printed as max
+COLUMN_TITLES = {
+    "maximum": "max",
+    "minimum": "min",
+    "majority": "maj",
+}
+
+
+# the column title of one aggregate name
+# example: "maximum" gives "max", "th2" gives "th2"
+def column_title(name: str) -> str:
+    return COLUMN_TITLES.get(name, name)

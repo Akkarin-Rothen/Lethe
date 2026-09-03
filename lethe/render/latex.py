@@ -5,6 +5,7 @@
 # For error-free use of annotations
 from __future__ import annotations
 
+from ..aggregation import column_title
 from ..marginalization import ForgetResult
 from ..truth_tables import TruthTable
 
@@ -135,21 +136,21 @@ def forget_table(
     # True for a kept atom, False for a forgotten one
     # example: ('a','b','c') with kept ('a',) gives [True, False, False]
     keep = []
+    header = []
+
     for atom in result.atom_names:
         keep.append(atom in result.kept)
+        header.append(_bold(atom))
 
-    header = []
-    for atom, shown in zip(result.atom_names, keep):
-        if shown:
-            header.append(_bold(atom))
-        else:
-            header.append(_bold(EMPTY))
     header.append(_bold("A"))
+
+    # only the short name, not $\mathrm{ModMg}_{...}$
+    # the column holds one digit, the long title would be ten times as wide
+    # the caption says which operation the table shows
     for name in result.column_names():
-        header.append(_bold(rf"$\mathrm{{ModMg}}_{{{name}}}$"))
+        header.append(_bold(column_title(name)))
     if show_var_forget:
-        forgotten = ", ".join(result.forgotten)
-        header.append(_bold(rf"$\text{{VarForget}}(A, \{{{forgotten}\}})$"))
+        header.append(_bold("VarForget"))
 
     rows = []
     for position, group in enumerate(result.groups):
@@ -188,8 +189,7 @@ def forget_table(
         forgotten = ", ".join(result.forgotten)
         formula = result.formula.to_latex()
         caption = (
-            rf"Forgetting $\{{{forgotten}\}}$ in $A = {formula}$. "
-            "The emptied columns mark the forgotten variables."
+            rf"Forgetting $\{{{forgotten}\}}$ in $A = {formula}$."
         )
 
     return _document(

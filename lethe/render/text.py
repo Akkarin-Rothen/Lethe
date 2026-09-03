@@ -4,6 +4,7 @@
 # For error-free use of annotations
 from __future__ import annotations
 
+from ..aggregation import column_title
 from ..marginalization import ForgetResult
 from ..truth_tables import TruthTable
 
@@ -71,13 +72,22 @@ def _rule(widths: list[int]) -> str:
 
 
 # builds the whole frame from a header and the rows
-def _table(header: list[str], rows: list[list[str]]) -> str:
+# notes is one text per data row, written to the right of the frame
+# an empty text or no notes at all leaves the line as it is
+def _table(
+    header: list[str],
+    rows: list[list[str]],
+    notes: list[str] | None = None,
+) -> str:
     widths = _widths(header, rows)
     rule = _rule(widths)
 
     output = [rule, _line(header, widths), rule]
-    for row in rows:
-        output.append(_line(row, widths))
+    for index, row in enumerate(rows):
+        line = _line(row, widths)
+        if notes is not None and notes[index]:
+            line = line + "   " + notes[index]
+        output.append(line)
     output.append(rule)
     return "\n".join(output)
 
@@ -111,25 +121,34 @@ def forget_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
     # True for every atom that is kept, False for every forgotten one
     # example: atom_names ('a','b','c') with kept ('a',) gives [True, False, False]
     keep = []
+    header = []
     for atom in result.atom_names:
         keep.append(atom in result.kept)
+        header.append(atom)
 
-    header = []
-    for atom, shown in zip(result.atom_names, keep):
-        if shown:
-            header.append(atom)
-        else:
-            header.append(EMPTY)
     header.append(str(result.formula))
     for name in result.column_names():
-        header.append(name)
+        header.append(column_title(name))
     if show_var_forget:
         header.append("VarForget")
 
     rows = []
+    notes = []
     for position, group in enumerate(result.groups):
+        # the note goes beside the first two rows of the group, as in the thesis
+        # example: "group a=0" and "1 of 4 rows true"
+        pairs = []
+        for atom, bit in zip(result.kept, group.key):
+            pairs.append(f"{atom}={_cell(bit)}")
+        group_notes = ["group " + ", ".join(pairs),
+                       f"{group.true_count()} of {group.size()} rows true"]
+
         for index, row in enumerate(group.rows):
             last = index == group.size() - 1
+            if index < len(group_notes):
+                notes.append(group_notes[index])
+            else:
+                notes.append(EMPTY)
 
             cells = []
             for bit, shown in zip(row, keep):
@@ -147,7 +166,7 @@ def forget_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
                 cells.append(_only_last(result.var_forget_values[position], last))
 
             rows.append(cells)
-    return _table(header, rows)
+    return _table(header, rows, notes)
 
 
 # a short report on one forgetting run, one fact per line
@@ -166,5 +185,5 @@ def summary(result: ForgetResult) -> str:
             verdict = "agrees with"
         else:
             verdict = "differs from"
-        lines.append(f"  {name:<10} {verdict} VarForget")
+        lines.append(f"  {column_title(name):<10} {verdict} VarForget")
     return "\n".join(lines)
