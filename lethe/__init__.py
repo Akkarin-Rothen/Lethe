@@ -8,7 +8,7 @@ from .formulas import CATALOG
 from .forgetting import var_forget
 from .marginalization import forget
 from .parser import ParseError, parse
-from .truth_tables import TruthTable, equivalent
+from .truth_tables import TruthTable
 from .syntax import (
     And,
     Atom,
@@ -35,7 +35,6 @@ __all__ = [
     "ParseError",
     "TOP",
     "TruthTable",
-    "equivalent",
     "forget",
     "parse",
     "signature",

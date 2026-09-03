@@ -59,20 +59,7 @@ CATALOG: dict[str, CatalogEntry] = {
     "F5": CatalogEntry("F5", "(a = b) = c"),
     "F6": CatalogEntry("F6", "(a & b & c) | (a & !b & c)"),
     "F7": CatalogEntry("F7", "(a | b) & (c | d) & (e | f)"),
-    "F8": CatalogEntry("F8", "a | (b & c)"),
 }
-
-
-# looks up an entry by name, upper and lower case both work
-# example: get("f1") and get("F1") give the same entry
-# example: get("F9") raises KeyError and lists the valid names
-def get(name: str) -> CatalogEntry:
-    try:
-        return CATALOG[name.upper()]
-    except KeyError:
-        raise KeyError(
-            f"unknown formula {name!r}; expected one of {', '.join(CATALOG)}"
-        ) from None
 
 
 # takes either a catalog name or a formula as text

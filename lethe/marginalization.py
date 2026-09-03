@@ -4,8 +4,6 @@
 # For error-free use of annotations
 from __future__ import annotations
 
-# combinations builds every subsignature of a given size
-import itertools
 from dataclasses import dataclass
 from typing import Iterable, Sequence
 
@@ -104,25 +102,6 @@ class ForgetResult:
     def agrees_with_var_forget(self, name: str) -> bool:
         return self.values_of(name) == self.var_forget_values
 
-    # the test oracle, the maximum has to give the same as VarForget
-    # example: True for the whole catalog
-    def oracle_holds(self) -> bool:
-        return self.agrees_with_var_forget("maximum")
-
-
-def model_marginalization(
-    models: Iterable[Interpretation],
-    atom_names: Sequence[str],
-    kept: Sequence[str],
-) -> set[Interpretation]:
-    positions = _positions_of(kept, atom_names)
-
-    projected = set()
-    for row in models:
-        projected.add(_key_of(row, positions))
-    return projected
-
-
 # forgets atoms both ways and puts both results in one ForgetResult
 # semantic: group the rows, aggregate every group
 # syntactic: call var_forget
@@ -141,12 +120,9 @@ def forget(
     forgotten: Iterable[str],
     aggregates: Sequence[Aggregate] = (maximum,),
     thresholds: Sequence[int] = (),
-    atom_names: tuple[str, ...] | None = None,
 ) -> ForgetResult:
-    if atom_names is None:
-        atom_names = signature(formula)
-    else:
-        atom_names = tuple(atom_names)
+    atom_names = signature(formula)
+
 
     # set drops duplicates, sorted keeps the order stable
     # example: ['c', 'b', 'c'] gives ('b', 'c')
@@ -256,19 +232,3 @@ def _group_rows(table: TruthTable, kept: tuple[str, ...]) -> tuple[MarginalGroup
             values.append(value)
         groups.append(MarginalGroup(key, tuple(rows), tuple(values)))
     return tuple(groups)
-
-
-# every set of atoms that can be forgotten
-# proper=True leaves out the full signature, there would be nothing left to group by
-# example: ('a','b','c') gives 6, three of size 1 and three of size 2
-def subsignatures(
-    atom_names: Sequence[str], *, proper: bool = True
-) -> list[tuple[str, ...]]:
-    largest = len(atom_names)
-    if proper:
-        largest = largest - 1
-
-    result = []
-    for size in range(1, largest + 1):
-        result.extend(itertools.combinations(atom_names, size))
-    return result

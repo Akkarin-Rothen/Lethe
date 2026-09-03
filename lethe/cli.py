@@ -70,7 +70,7 @@ def _emit(output: str, out: str | None) -> None:
     if out is None:
         print(output)
     else:
-        Path("out/"+out).write_text(output + "\n", encoding="utf-8")
+        Path(out).write_text(output + "\n", encoding="utf-8")
         print(f"wrote {out}")
 
 

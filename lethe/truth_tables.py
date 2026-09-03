@@ -101,16 +101,3 @@ class TruthTable:
     # example: (a | b) & c gives 3 of 8
     def true_rows(self) -> int:
         return sum(self.values)
-
-
-# true if both formulas have the same models
-# needed to show that a forgotten formula still means the same
-# example: a > b and !a | b are equivalent
-# example: a and a & (b | !b) are equivalent, b is forced into both tables
-# example: a | b and a are not
-def equivalent(left: Formula, right: Formula) -> bool:
-    # both tables need the same signature, else the rows do not line up
-    shared_atom_names = tuple(sorted(left.atoms() | right.atoms()))
-    left_table = TruthTable.build(left, shared_atom_names)
-    right_table = TruthTable.build(right, shared_atom_names)
-    return left_table.values == right_table.values
