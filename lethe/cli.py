@@ -9,6 +9,7 @@ from .formulas import CATALOG, resolve as resolve_formula
 from .marginalization import forget
 from .parser import ParseError
 from .render import latex, text
+from .syntax import signature
 from .truth_tables import TruthTable
 
 
@@ -114,9 +115,11 @@ def command_forget(args: argparse.Namespace) -> int:
     formula = resolve_formula(args.formula)
     forgotten = _parse_atom_list(args.forget)
 
-    # the group size is needed before forgetting, so that "all" knows how many
-    # thresholds there are
-    group_size = 2 ** len(set(forgotten))
+    # "all" uses the group size before forgetting: 2 ** |Gamma|.
+    # Count only atoms that occur in the formula, since forget() rejects unknown atoms anyway.
+    # This also prevents typos in -f from generating a huge number of unnecessary names.
+    # Example: -f b,c on (a | b) & c -> 4, but -f b,z -> 2, not 4.
+    group_size = 2 ** len(set(forgotten) & set(signature(formula)))
     aggregates, thresholds = _parse_aggregates(args.aggregates, group_size)
     result = forget(formula, forgotten, aggregates, thresholds)
 
