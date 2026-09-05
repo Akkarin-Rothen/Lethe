@@ -1,4 +1,4 @@
-# parser.py does the opposite of printing: it reads a text like "(a|b)&c" and builds the tree.
+# parser.py reads a text like "(a|b)&c" and builds the tree.
 # it works in two stages: a tokenizer cuts the text into pieces, a recursive descent parser turns those pieces into nodes.
 # The precedence is not a number here but the order of the parser methods, and a while loop or a recursive call decides left- against right-associativity.
 
