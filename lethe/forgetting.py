@@ -1,11 +1,7 @@
 # forgetting.py performs syntactical forgetting VarForget.
 # the module only manipulates the formula. it does not create a truth table.
-
-
 from __future__ import annotations
-
 from typing import Iterable
-
 from .syntax import (
     And,
     BOTTOM,
@@ -17,7 +13,6 @@ from .syntax import (
     Or,
     TOP,
 )
-
 
 # substitutes the atom for the truth value TOP or BOTTOM
 # example: substitute((a | b) & c, 'c', True) gives (a | b) & 1
