@@ -215,7 +215,16 @@ def _key_of(row: Interpretation, positions: Sequence[int]) -> Interpretation:
 def _group_rows(table: TruthTable, kept: tuple[str, ...]) -> tuple[MarginalGroup, ...]:
     positions = _positions_of(kept, table.atom_names)
 
-    # one bucket per group
+    # one bucket per group, the key is the part of the row that belongs to kept
+    # setdefault gives back the list under key, or puts an empty list there first
+    # example: (a | b) & c with kept ('a', 'b'), so positions [0, 1]
+    #   row (F,F,F) value F  ->  key (F,F)  ->  buckets[(F,F)] = [((F,F,F), F)]
+    #   row (F,F,T) value F  ->  key (F,F)  ->  appended to the same list
+    #   row (F,T,F) value F  ->  key (F,T)  ->  new list buckets[(F,T)]
+    #   after the loop: {(F,F): [((F,F,F),F), ((F,F,T),F)],
+    #                    (F,T): [((F,T,F),F), ((F,T,T),T)],
+    #                    (T,F): [((T,F,F),F), ((T,F,T),T)],
+    #                    (T,T): [((T,T,F),F), ((T,T,T),T)]}
     buckets = {}
     for row, value in zip(table.rows, table.values):
         key = _key_of(row, positions)
@@ -223,6 +232,17 @@ def _group_rows(table: TruthTable, kept: tuple[str, ...]) -> tuple[MarginalGroup
 
     # sorted, so group i belongs to row i of the reference table
     # without sorted the oracle fails sometimes, not always
+    # every bucket holds (row, value) pairs, the inner loop splits them into two lists
+    # example: the buckets from above, kept ('a', 'b')
+    #   sorted(buckets) gives [(F,F), (F,T), (T,F), (T,T)], the row order of a table over ('a', 'b')
+    #   key (F,F): pairs [((F,F,F),F), ((F,F,T),F)]
+    #     rows   [(F,F,F), (F,F,T)]
+    #     values [F, F]
+    #     -> MarginalGroup((F,F), ((F,F,F), (F,F,T)), (F, F))
+    #   key (F,T): pairs [((F,T,F),F), ((F,T,T),T)]
+    #     -> MarginalGroup((F,T), ((F,T,F), (F,T,T)), (F, T))
+    #   after the loop: four groups, values (F,F), (F,T), (F,T), (F,T)
+    #   group 0 is row a=0,b=0 of the reference table, group 3 is row a=1,b=1
     groups = []
     for key in sorted(buckets):
         rows = []
