@@ -50,10 +50,11 @@ def _bold(text: str) -> str:
     return rf"\textbf{{{text}}}"
 
 
-# the column specification
-# example: 3 atoms and 2 extra columns give |ccc|c|c|c|
+# the column specification, a vertical line between every pair of columns
+# the atoms, the formula column and the extra columns all get the same "c|"
+# example: 3 atoms and 2 extra columns give |c|c|c|c|c|c|
 def _column_spec(atom_count: int, extra: int) -> str:
-    return "|" + "c" * atom_count + "|c|" + "c|" * extra
+    return "|" + "c|" * (atom_count + 1 + extra)
 
 
 # joins the cells and closes the row
@@ -89,7 +90,7 @@ def _document(
 
 
 # the full truth table of one formula
-# example: (a | b) & c gives the spec |ccc|c| and eight rows
+# example: (a | b) & c gives the spec |c|c|c|c| and eight rows
 def truth_table(
     table: TruthTable,
     *,
@@ -124,7 +125,7 @@ def truth_table(
 # the forgotten atoms keep their column, only the cells are emptied
 # an aggregated value belongs to the whole group, so it stands in the last row
 # every group gets its own colour, unless colour_groups is False
-# example: forgetting b and c from (a | b) & c gives the spec |ccc|c|c|c|c|
+# example: forgetting b and c from (a | b) & c gives the spec |c|c|c|c|c|c|c|
 def forget_table(
     result: ForgetResult,
     *,
