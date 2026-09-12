@@ -74,7 +74,7 @@ def _document(
     label: str,
 ) -> str:
     lines = [
-        r"\begin{table}[ht]",
+        r"\begin{table}[!tb]",
         r"    \centering",
         rf"    \begin{{tabular}}{{{column_spec}}}",
         r"        \hline",
