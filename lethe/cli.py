@@ -124,7 +124,11 @@ def command_forget(args: argparse.Namespace) -> int:
     result = forget(formula, forgotten, aggregates, thresholds)
 
     if args.latex:
-        lines = [latex.truth_table(result.table), "", latex.forget_table(result)]
+        lines = [
+            latex.truth_table(result.table),
+            "",
+            latex.forget_table(result, caption=args.caption, label=args.label),
+        ]
         _emit("\n".join(lines), args.out)
         return 0
 
@@ -197,6 +201,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     forgetting.add_argument(
         "--latex", action="store_true", help="emit LaTeX tables instead of text"
+    )
+    forgetting.add_argument(
+        "--caption",
+        help="LaTeX caption of the forgetting table, with --latex (default: names the formula and the forgotten atoms)",
+    )
+    forgetting.add_argument(
+        "--label",
+        help="LaTeX label of the forgetting table, with --latex (default: tab:truthtabforg)",
     )
     forgetting.add_argument(
         "-o", "--out", help="write to this file instead of printing"

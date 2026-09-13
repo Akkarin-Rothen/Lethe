@@ -58,6 +58,8 @@ python3 -m lethe forget F1 -f b,c
 python3 -m lethe forget F1 -f b,c -a all
 python3 -m lethe forget "(a|b)&c" -f b,c -a max,th2 --latex
 python3 -m lethe forget F1 -f b,c -a all --latex -o f1-forget.tex
+python3 -m lethe forget F1 -f b,c --latex --label tab:f1-forget-bc
+python3 -m lethe forget F1 -f b,c --latex --caption 'Forgetting $\{b,c\}$ in $F_1$.'
 ```
 
 | Option | Meaning |
@@ -65,6 +67,8 @@ python3 -m lethe forget F1 -f b,c -a all --latex -o f1-forget.tex
 | `-f`, `--forget` | Required. Atoms to forget, e.g. `b,c` or `b c` |
 | `-a`, `--aggregates` | Aggregation methods, default: `max,min,majority` |
 | `--latex` | Output LaTeX instead of plain text |
+| `--caption` | LaTeX caption of the forgetting table. Default names the formula and the forgotten atoms. Only with `--latex` |
+| `--label` | LaTeX label of the forgetting table, default `tab:truthtabforg`. Only with `--latex` |
 | `-o`, `--out` | Write to this file instead of printing |
 
 Output: Summary, full table before forgetting, and full table after forgetting.  
@@ -89,6 +93,28 @@ Include the result instead of pasting it, so it stays up to date:
 `-o` is safer than a shell redirect. On an input error nothing is written and
 an existing file keeps its content, while `>` empties the file before the
 program even starts.
+
+Every generated file carries the same labels, `tab:truthtab` for the table
+before forgetting and `tab:truthtabforg` for the table after. Including two
+such files in one document makes LaTeX warn `Label multiply defined`, and
+`\ref` then points to whichever table was read last. Give each forgetting
+table its own label when you generate more than one:
+
+```sh
+python3 -m lethe forget F1 -f b,c --latex --label tab:f1-bc -o f1-bc.tex
+python3 -m lethe forget F2 -f c,d --latex --label tab:f2-cd -o f2-cd.tex
+```
+
+The table before forgetting keeps `tab:truthtab`. If you include it too, edit
+or remove that line in the generated file.
+
+`--caption` replaces the caption text of the forgetting table in the same way.
+The text is written into the file verbatim, so it may contain math. Quote it
+with single quotes so the shell leaves `$` and `\` alone:
+
+```sh
+python3 -m lethe forget F1 -f b,c --latex --caption 'Forgetting $\{b,c\}$ in $F_1$.' -o f1-bc.tex
+```
 
 ## Aggregates
 

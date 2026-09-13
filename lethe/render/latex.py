@@ -130,7 +130,7 @@ def forget_table(
     result: ForgetResult,
     *,
     caption: str | None = None,
-    label: str = "tab:truthtabforg",
+    label: str | None = None,
     colour_groups: bool = True,
     show_var_forget: bool = True,
 ) -> str:
@@ -192,6 +192,9 @@ def forget_table(
         caption = (
             rf"Forgetting $\{{{forgotten}\}}$ in $A = {formula}$."
         )
+    # None means "not chosen by the caller", so the default label lives only here
+    if label is None:
+        label = "tab:truthtabforg"
 
     return _document(
         header,
