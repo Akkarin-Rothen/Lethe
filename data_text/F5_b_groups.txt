@@ -1,0 +1,35 @@
+formula        a = b = c
+atoms          {a, b, c}
+forgotten      {b}
+kept           {a, c}
+group size     2
+VarForget      (a = c) | (!a = c)
+  max        agrees with VarForget
+  min        differs from VarForget
+  maj        agrees with VarForget
+  th1        agrees with VarForget
+  th2        differs from VarForget
+
+before forgetting:
++---+---+---+-----------+
+| a | b | c | a = b = c |
++---+---+---+-----------+
+| 0 | 0 | 0 |     0     |
+| 0 | 0 | 1 |     1     |
+| 0 | 1 | 0 |     1     |
+| 0 | 1 | 1 |     0     |
+| 1 | 0 | 0 |     1     |
+| 1 | 0 | 1 |     0     |
+| 1 | 1 | 0 |     0     |
+| 1 | 1 | 1 |     1     |
++---+---+---+-----------+
+
+after forgetting {b}:
++---+---+-----------+------------+-----+-----+-----+-----+-----+-----------+
+| a | c | true_rows | group_size | max | min | maj | th1 | th2 | VarForget |
++---+---+-----------+------------+-----+-----+-----+-----+-----+-----------+
+| 0 | 0 |     1     |     2      |  1  |  0  |  1  |  1  |  0  |     1     |
+| 0 | 1 |     1     |     2      |  1  |  0  |  1  |  1  |  0  |     1     |
+| 1 | 0 |     1     |     2      |  1  |  0  |  1  |  1  |  0  |     1     |
+| 1 | 1 |     1     |     2      |  1  |  0  |  1  |  1  |  0  |     1     |
++---+---+-----------+------------+-----+-----+-----+-----+-----+-----------+

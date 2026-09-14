@@ -1,0 +1,41 @@
+formula        a & b & c | a & !b & c
+atoms          {a, b, c}
+forgotten      {b, c}
+kept           {a}
+group size     4
+VarForget      a
+  max        agrees with VarForget
+  min        differs from VarForget
+  maj        agrees with VarForget
+  th1        agrees with VarForget
+  th2        agrees with VarForget
+  th3        differs from VarForget
+  th4        differs from VarForget
+
+before forgetting:
++---+---+---+------------------------+
+| a | b | c | a & b & c | a & !b & c |
++---+---+---+------------------------+
+| 0 | 0 | 0 |           0            |
+| 0 | 0 | 1 |           0            |
+| 0 | 1 | 0 |           0            |
+| 0 | 1 | 1 |           0            |
+| 1 | 0 | 0 |           0            |
+| 1 | 0 | 1 |           1            |
+| 1 | 1 | 0 |           0            |
+| 1 | 1 | 1 |           1            |
++---+---+---+------------------------+
+
+after forgetting {b, c}:
++---+---+---+------------------------+-----+-----+-----+-----+-----+-----+-----+-----------+
+| a | b | c | a & b & c | a & !b & c | max | min | maj | th1 | th2 | th3 | th4 | VarForget |
++---+---+---+------------------------+-----+-----+-----+-----+-----+-----+-----+-----------+
+| 0 |   |   |           0            |     |     |     |     |     |     |     |           |   group a=0
+| 0 |   |   |           0            |     |     |     |     |     |     |     |           |   0 of 4 rows true
+| 0 |   |   |           0            |     |     |     |     |     |     |     |           |
+| 0 |   |   |           0            |  0  |  0  |  0  |  0  |  0  |  0  |  0  |     0     |
+| 1 |   |   |           0            |     |     |     |     |     |     |     |           |   group a=1
+| 1 |   |   |           1            |     |     |     |     |     |     |     |           |   2 of 4 rows true
+| 1 |   |   |           0            |     |     |     |     |     |     |     |           |
+| 1 |   |   |           1            |  1  |  0  |  1  |  1  |  1  |  0  |  0  |     1     |
++---+---+---+------------------------+-----+-----+-----+-----+-----+-----+-----+-----------+
