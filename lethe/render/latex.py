@@ -209,8 +209,8 @@ def forget_table(
 
 
 # one row per group instead of one row per interpretation
-# the kept atoms name the group, $c_1$ is the number of true rows, $n$ the group size,
-# then one column per aggregate, as in the definition of Th_k
+# the kept atoms name the group, true_rows is c_1 in the thesis, group_size is n,
+# then one column per aggregate; the headers match text and CSV, the caption gives the notation
 # group i gets the same colour as in forget_table, so both tables read side by side
 # example: forgetting b and c from (a | b) & c gives two data rows and the spec |c|c|c|c|c|c|c|
 def group_table(
@@ -224,8 +224,9 @@ def group_table(
     header = []
     for atom in result.kept:
         header.append(_bold(atom))
-    header.append("$c_1$")
-    header.append("$n$")
+    # \_ because a bare underscore is a subscript in LaTeX
+    header.append(_bold(r"true\_rows"))
+    header.append(_bold(r"group\_size"))
     for name in result.column_names():
         header.append(_bold(column_title(name)))
     if show_var_forget:
