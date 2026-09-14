@@ -1,0 +1,251 @@
+python3 -m lethe table F1 --csv -o data_csv/F1_table.csv
+python3 -m lethe forget F1 -f a -a all --csv -o data_csv/F1_a.csv
+python3 -m lethe forget F1 -f a -a all --csv --groups -o data_csv/F1_a_groups.csv
+python3 -m lethe forget F1 -f b -a all --csv -o data_csv/F1_b.csv
+python3 -m lethe forget F1 -f b -a all --csv --groups -o data_csv/F1_b_groups.csv
+python3 -m lethe forget F1 -f c -a all --csv -o data_csv/F1_c.csv
+python3 -m lethe forget F1 -f c -a all --csv --groups -o data_csv/F1_c_groups.csv
+python3 -m lethe forget F1 -f a,b -a all --csv -o data_csv/F1_ab.csv
+python3 -m lethe forget F1 -f a,b -a all --csv --groups -o data_csv/F1_ab_groups.csv
+python3 -m lethe forget F1 -f a,c -a all --csv -o data_csv/F1_ac.csv
+python3 -m lethe forget F1 -f a,c -a all --csv --groups -o data_csv/F1_ac_groups.csv
+python3 -m lethe forget F1 -f b,c -a all --csv -o data_csv/F1_bc.csv
+python3 -m lethe forget F1 -f b,c -a all --csv --groups -o data_csv/F1_bc_groups.csv
+python3 -m lethe table F2 --csv -o data_csv/F2_table.csv
+python3 -m lethe forget F2 -f a -a all --csv -o data_csv/F2_a.csv
+python3 -m lethe forget F2 -f a -a all --csv --groups -o data_csv/F2_a_groups.csv
+python3 -m lethe forget F2 -f b -a all --csv -o data_csv/F2_b.csv
+python3 -m lethe forget F2 -f b -a all --csv --groups -o data_csv/F2_b_groups.csv
+python3 -m lethe forget F2 -f c -a all --csv -o data_csv/F2_c.csv
+python3 -m lethe forget F2 -f c -a all --csv --groups -o data_csv/F2_c_groups.csv
+python3 -m lethe forget F2 -f d -a all --csv -o data_csv/F2_d.csv
+python3 -m lethe forget F2 -f d -a all --csv --groups -o data_csv/F2_d_groups.csv
+python3 -m lethe forget F2 -f a,b -a all --csv -o data_csv/F2_ab.csv
+python3 -m lethe forget F2 -f a,b -a all --csv --groups -o data_csv/F2_ab_groups.csv
+python3 -m lethe forget F2 -f a,c -a all --csv -o data_csv/F2_ac.csv
+python3 -m lethe forget F2 -f a,c -a all --csv --groups -o data_csv/F2_ac_groups.csv
+python3 -m lethe forget F2 -f a,d -a all --csv -o data_csv/F2_ad.csv
+python3 -m lethe forget F2 -f a,d -a all --csv --groups -o data_csv/F2_ad_groups.csv
+python3 -m lethe forget F2 -f b,c -a all --csv -o data_csv/F2_bc.csv
+python3 -m lethe forget F2 -f b,c -a all --csv --groups -o data_csv/F2_bc_groups.csv
+python3 -m lethe forget F2 -f b,d -a all --csv -o data_csv/F2_bd.csv
+python3 -m lethe forget F2 -f b,d -a all --csv --groups -o data_csv/F2_bd_groups.csv
+python3 -m lethe forget F2 -f c,d -a all --csv -o data_csv/F2_cd.csv
+python3 -m lethe forget F2 -f c,d -a all --csv --groups -o data_csv/F2_cd_groups.csv
+python3 -m lethe forget F2 -f a,b,c -a all --csv -o data_csv/F2_abc.csv
+python3 -m lethe forget F2 -f a,b,c -a all --csv --groups -o data_csv/F2_abc_groups.csv
+python3 -m lethe forget F2 -f a,b,d -a all --csv -o data_csv/F2_abd.csv
+python3 -m lethe forget F2 -f a,b,d -a all --csv --groups -o data_csv/F2_abd_groups.csv
+python3 -m lethe forget F2 -f a,c,d -a all --csv -o data_csv/F2_acd.csv
+python3 -m lethe forget F2 -f a,c,d -a all --csv --groups -o data_csv/F2_acd_groups.csv
+python3 -m lethe forget F2 -f b,c,d -a all --csv -o data_csv/F2_bcd.csv
+python3 -m lethe forget F2 -f b,c,d -a all --csv --groups -o data_csv/F2_bcd_groups.csv
+python3 -m lethe table F3 --csv -o data_csv/F3_table.csv
+python3 -m lethe forget F3 -f a -a all --csv -o data_csv/F3_a.csv
+python3 -m lethe forget F3 -f a -a all --csv --groups -o data_csv/F3_a_groups.csv
+python3 -m lethe forget F3 -f b -a all --csv -o data_csv/F3_b.csv
+python3 -m lethe forget F3 -f b -a all --csv --groups -o data_csv/F3_b_groups.csv
+python3 -m lethe forget F3 -f c -a all --csv -o data_csv/F3_c.csv
+python3 -m lethe forget F3 -f c -a all --csv --groups -o data_csv/F3_c_groups.csv
+python3 -m lethe forget F3 -f d -a all --csv -o data_csv/F3_d.csv
+python3 -m lethe forget F3 -f d -a all --csv --groups -o data_csv/F3_d_groups.csv
+python3 -m lethe forget F3 -f a,b -a all --csv -o data_csv/F3_ab.csv
+python3 -m lethe forget F3 -f a,b -a all --csv --groups -o data_csv/F3_ab_groups.csv
+python3 -m lethe forget F3 -f a,c -a all --csv -o data_csv/F3_ac.csv
+python3 -m lethe forget F3 -f a,c -a all --csv --groups -o data_csv/F3_ac_groups.csv
+python3 -m lethe forget F3 -f a,d -a all --csv -o data_csv/F3_ad.csv
+python3 -m lethe forget F3 -f a,d -a all --csv --groups -o data_csv/F3_ad_groups.csv
+python3 -m lethe forget F3 -f b,c -a all --csv -o data_csv/F3_bc.csv
+python3 -m lethe forget F3 -f b,c -a all --csv --groups -o data_csv/F3_bc_groups.csv
+python3 -m lethe forget F3 -f b,d -a all --csv -o data_csv/F3_bd.csv
+python3 -m lethe forget F3 -f b,d -a all --csv --groups -o data_csv/F3_bd_groups.csv
+python3 -m lethe forget F3 -f c,d -a all --csv -o data_csv/F3_cd.csv
+python3 -m lethe forget F3 -f c,d -a all --csv --groups -o data_csv/F3_cd_groups.csv
+python3 -m lethe forget F3 -f a,b,c -a all --csv -o data_csv/F3_abc.csv
+python3 -m lethe forget F3 -f a,b,c -a all --csv --groups -o data_csv/F3_abc_groups.csv
+python3 -m lethe forget F3 -f a,b,d -a all --csv -o data_csv/F3_abd.csv
+python3 -m lethe forget F3 -f a,b,d -a all --csv --groups -o data_csv/F3_abd_groups.csv
+python3 -m lethe forget F3 -f a,c,d -a all --csv -o data_csv/F3_acd.csv
+python3 -m lethe forget F3 -f a,c,d -a all --csv --groups -o data_csv/F3_acd_groups.csv
+python3 -m lethe forget F3 -f b,c,d -a all --csv -o data_csv/F3_bcd.csv
+python3 -m lethe forget F3 -f b,c,d -a all --csv --groups -o data_csv/F3_bcd_groups.csv
+python3 -m lethe table F4 --csv -o data_csv/F4_table.csv
+python3 -m lethe forget F4 -f a -a all --csv -o data_csv/F4_a.csv
+python3 -m lethe forget F4 -f a -a all --csv --groups -o data_csv/F4_a_groups.csv
+python3 -m lethe forget F4 -f b -a all --csv -o data_csv/F4_b.csv
+python3 -m lethe forget F4 -f b -a all --csv --groups -o data_csv/F4_b_groups.csv
+python3 -m lethe forget F4 -f c -a all --csv -o data_csv/F4_c.csv
+python3 -m lethe forget F4 -f c -a all --csv --groups -o data_csv/F4_c_groups.csv
+python3 -m lethe forget F4 -f d -a all --csv -o data_csv/F4_d.csv
+python3 -m lethe forget F4 -f d -a all --csv --groups -o data_csv/F4_d_groups.csv
+python3 -m lethe forget F4 -f a,b -a all --csv -o data_csv/F4_ab.csv
+python3 -m lethe forget F4 -f a,b -a all --csv --groups -o data_csv/F4_ab_groups.csv
+python3 -m lethe forget F4 -f a,c -a all --csv -o data_csv/F4_ac.csv
+python3 -m lethe forget F4 -f a,c -a all --csv --groups -o data_csv/F4_ac_groups.csv
+python3 -m lethe forget F4 -f a,d -a all --csv -o data_csv/F4_ad.csv
+python3 -m lethe forget F4 -f a,d -a all --csv --groups -o data_csv/F4_ad_groups.csv
+python3 -m lethe forget F4 -f b,c -a all --csv -o data_csv/F4_bc.csv
+python3 -m lethe forget F4 -f b,c -a all --csv --groups -o data_csv/F4_bc_groups.csv
+python3 -m lethe forget F4 -f b,d -a all --csv -o data_csv/F4_bd.csv
+python3 -m lethe forget F4 -f b,d -a all --csv --groups -o data_csv/F4_bd_groups.csv
+python3 -m lethe forget F4 -f c,d -a all --csv -o data_csv/F4_cd.csv
+python3 -m lethe forget F4 -f c,d -a all --csv --groups -o data_csv/F4_cd_groups.csv
+python3 -m lethe forget F4 -f a,b,c -a all --csv -o data_csv/F4_abc.csv
+python3 -m lethe forget F4 -f a,b,c -a all --csv --groups -o data_csv/F4_abc_groups.csv
+python3 -m lethe forget F4 -f a,b,d -a all --csv -o data_csv/F4_abd.csv
+python3 -m lethe forget F4 -f a,b,d -a all --csv --groups -o data_csv/F4_abd_groups.csv
+python3 -m lethe forget F4 -f a,c,d -a all --csv -o data_csv/F4_acd.csv
+python3 -m lethe forget F4 -f a,c,d -a all --csv --groups -o data_csv/F4_acd_groups.csv
+python3 -m lethe forget F4 -f b,c,d -a all --csv -o data_csv/F4_bcd.csv
+python3 -m lethe forget F4 -f b,c,d -a all --csv --groups -o data_csv/F4_bcd_groups.csv
+python3 -m lethe table F5 --csv -o data_csv/F5_table.csv
+python3 -m lethe forget F5 -f a -a all --csv -o data_csv/F5_a.csv
+python3 -m lethe forget F5 -f a -a all --csv --groups -o data_csv/F5_a_groups.csv
+python3 -m lethe forget F5 -f b -a all --csv -o data_csv/F5_b.csv
+python3 -m lethe forget F5 -f b -a all --csv --groups -o data_csv/F5_b_groups.csv
+python3 -m lethe forget F5 -f c -a all --csv -o data_csv/F5_c.csv
+python3 -m lethe forget F5 -f c -a all --csv --groups -o data_csv/F5_c_groups.csv
+python3 -m lethe forget F5 -f a,b -a all --csv -o data_csv/F5_ab.csv
+python3 -m lethe forget F5 -f a,b -a all --csv --groups -o data_csv/F5_ab_groups.csv
+python3 -m lethe forget F5 -f a,c -a all --csv -o data_csv/F5_ac.csv
+python3 -m lethe forget F5 -f a,c -a all --csv --groups -o data_csv/F5_ac_groups.csv
+python3 -m lethe forget F5 -f b,c -a all --csv -o data_csv/F5_bc.csv
+python3 -m lethe forget F5 -f b,c -a all --csv --groups -o data_csv/F5_bc_groups.csv
+python3 -m lethe table F6 --csv -o data_csv/F6_table.csv
+python3 -m lethe forget F6 -f a -a all --csv -o data_csv/F6_a.csv
+python3 -m lethe forget F6 -f a -a all --csv --groups -o data_csv/F6_a_groups.csv
+python3 -m lethe forget F6 -f b -a all --csv -o data_csv/F6_b.csv
+python3 -m lethe forget F6 -f b -a all --csv --groups -o data_csv/F6_b_groups.csv
+python3 -m lethe forget F6 -f c -a all --csv -o data_csv/F6_c.csv
+python3 -m lethe forget F6 -f c -a all --csv --groups -o data_csv/F6_c_groups.csv
+python3 -m lethe forget F6 -f a,b -a all --csv -o data_csv/F6_ab.csv
+python3 -m lethe forget F6 -f a,b -a all --csv --groups -o data_csv/F6_ab_groups.csv
+python3 -m lethe forget F6 -f a,c -a all --csv -o data_csv/F6_ac.csv
+python3 -m lethe forget F6 -f a,c -a all --csv --groups -o data_csv/F6_ac_groups.csv
+python3 -m lethe forget F6 -f b,c -a all --csv -o data_csv/F6_bc.csv
+python3 -m lethe forget F6 -f b,c -a all --csv --groups -o data_csv/F6_bc_groups.csv
+python3 -m lethe table F7 --csv -o data_csv/F7_table.csv
+python3 -m lethe forget F7 -f a -a all --csv -o data_csv/F7_a.csv
+python3 -m lethe forget F7 -f a -a all --csv --groups -o data_csv/F7_a_groups.csv
+python3 -m lethe forget F7 -f b -a all --csv -o data_csv/F7_b.csv
+python3 -m lethe forget F7 -f b -a all --csv --groups -o data_csv/F7_b_groups.csv
+python3 -m lethe forget F7 -f c -a all --csv -o data_csv/F7_c.csv
+python3 -m lethe forget F7 -f c -a all --csv --groups -o data_csv/F7_c_groups.csv
+python3 -m lethe forget F7 -f d -a all --csv -o data_csv/F7_d.csv
+python3 -m lethe forget F7 -f d -a all --csv --groups -o data_csv/F7_d_groups.csv
+python3 -m lethe forget F7 -f e -a all --csv -o data_csv/F7_e.csv
+python3 -m lethe forget F7 -f e -a all --csv --groups -o data_csv/F7_e_groups.csv
+python3 -m lethe forget F7 -f f -a all --csv -o data_csv/F7_f.csv
+python3 -m lethe forget F7 -f f -a all --csv --groups -o data_csv/F7_f_groups.csv
+python3 -m lethe forget F7 -f a,b -a all --csv -o data_csv/F7_ab.csv
+python3 -m lethe forget F7 -f a,b -a all --csv --groups -o data_csv/F7_ab_groups.csv
+python3 -m lethe forget F7 -f a,c -a all --csv -o data_csv/F7_ac.csv
+python3 -m lethe forget F7 -f a,c -a all --csv --groups -o data_csv/F7_ac_groups.csv
+python3 -m lethe forget F7 -f a,d -a all --csv -o data_csv/F7_ad.csv
+python3 -m lethe forget F7 -f a,d -a all --csv --groups -o data_csv/F7_ad_groups.csv
+python3 -m lethe forget F7 -f a,e -a all --csv -o data_csv/F7_ae.csv
+python3 -m lethe forget F7 -f a,e -a all --csv --groups -o data_csv/F7_ae_groups.csv
+python3 -m lethe forget F7 -f a,f -a all --csv -o data_csv/F7_af.csv
+python3 -m lethe forget F7 -f a,f -a all --csv --groups -o data_csv/F7_af_groups.csv
+python3 -m lethe forget F7 -f b,c -a all --csv -o data_csv/F7_bc.csv
+python3 -m lethe forget F7 -f b,c -a all --csv --groups -o data_csv/F7_bc_groups.csv
+python3 -m lethe forget F7 -f b,d -a all --csv -o data_csv/F7_bd.csv
+python3 -m lethe forget F7 -f b,d -a all --csv --groups -o data_csv/F7_bd_groups.csv
+python3 -m lethe forget F7 -f b,e -a all --csv -o data_csv/F7_be.csv
+python3 -m lethe forget F7 -f b,e -a all --csv --groups -o data_csv/F7_be_groups.csv
+python3 -m lethe forget F7 -f b,f -a all --csv -o data_csv/F7_bf.csv
+python3 -m lethe forget F7 -f b,f -a all --csv --groups -o data_csv/F7_bf_groups.csv
+python3 -m lethe forget F7 -f c,d -a all --csv -o data_csv/F7_cd.csv
+python3 -m lethe forget F7 -f c,d -a all --csv --groups -o data_csv/F7_cd_groups.csv
+python3 -m lethe forget F7 -f c,e -a all --csv -o data_csv/F7_ce.csv
+python3 -m lethe forget F7 -f c,e -a all --csv --groups -o data_csv/F7_ce_groups.csv
+python3 -m lethe forget F7 -f c,f -a all --csv -o data_csv/F7_cf.csv
+python3 -m lethe forget F7 -f c,f -a all --csv --groups -o data_csv/F7_cf_groups.csv
+python3 -m lethe forget F7 -f d,e -a all --csv -o data_csv/F7_de.csv
+python3 -m lethe forget F7 -f d,e -a all --csv --groups -o data_csv/F7_de_groups.csv
+python3 -m lethe forget F7 -f d,f -a all --csv -o data_csv/F7_df.csv
+python3 -m lethe forget F7 -f d,f -a all --csv --groups -o data_csv/F7_df_groups.csv
+python3 -m lethe forget F7 -f e,f -a all --csv -o data_csv/F7_ef.csv
+python3 -m lethe forget F7 -f e,f -a all --csv --groups -o data_csv/F7_ef_groups.csv
+python3 -m lethe forget F7 -f a,b,c -a all --csv -o data_csv/F7_abc.csv
+python3 -m lethe forget F7 -f a,b,c -a all --csv --groups -o data_csv/F7_abc_groups.csv
+python3 -m lethe forget F7 -f a,b,d -a all --csv -o data_csv/F7_abd.csv
+python3 -m lethe forget F7 -f a,b,d -a all --csv --groups -o data_csv/F7_abd_groups.csv
+python3 -m lethe forget F7 -f a,b,e -a all --csv -o data_csv/F7_abe.csv
+python3 -m lethe forget F7 -f a,b,e -a all --csv --groups -o data_csv/F7_abe_groups.csv
+python3 -m lethe forget F7 -f a,b,f -a all --csv -o data_csv/F7_abf.csv
+python3 -m lethe forget F7 -f a,b,f -a all --csv --groups -o data_csv/F7_abf_groups.csv
+python3 -m lethe forget F7 -f a,c,d -a all --csv -o data_csv/F7_acd.csv
+python3 -m lethe forget F7 -f a,c,d -a all --csv --groups -o data_csv/F7_acd_groups.csv
+python3 -m lethe forget F7 -f a,c,e -a all --csv -o data_csv/F7_ace.csv
+python3 -m lethe forget F7 -f a,c,e -a all --csv --groups -o data_csv/F7_ace_groups.csv
+python3 -m lethe forget F7 -f a,c,f -a all --csv -o data_csv/F7_acf.csv
+python3 -m lethe forget F7 -f a,c,f -a all --csv --groups -o data_csv/F7_acf_groups.csv
+python3 -m lethe forget F7 -f a,d,e -a all --csv -o data_csv/F7_ade.csv
+python3 -m lethe forget F7 -f a,d,e -a all --csv --groups -o data_csv/F7_ade_groups.csv
+python3 -m lethe forget F7 -f a,d,f -a all --csv -o data_csv/F7_adf.csv
+python3 -m lethe forget F7 -f a,d,f -a all --csv --groups -o data_csv/F7_adf_groups.csv
+python3 -m lethe forget F7 -f a,e,f -a all --csv -o data_csv/F7_aef.csv
+python3 -m lethe forget F7 -f a,e,f -a all --csv --groups -o data_csv/F7_aef_groups.csv
+python3 -m lethe forget F7 -f b,c,d -a all --csv -o data_csv/F7_bcd.csv
+python3 -m lethe forget F7 -f b,c,d -a all --csv --groups -o data_csv/F7_bcd_groups.csv
+python3 -m lethe forget F7 -f b,c,e -a all --csv -o data_csv/F7_bce.csv
+python3 -m lethe forget F7 -f b,c,e -a all --csv --groups -o data_csv/F7_bce_groups.csv
+python3 -m lethe forget F7 -f b,c,f -a all --csv -o data_csv/F7_bcf.csv
+python3 -m lethe forget F7 -f b,c,f -a all --csv --groups -o data_csv/F7_bcf_groups.csv
+python3 -m lethe forget F7 -f b,d,e -a all --csv -o data_csv/F7_bde.csv
+python3 -m lethe forget F7 -f b,d,e -a all --csv --groups -o data_csv/F7_bde_groups.csv
+python3 -m lethe forget F7 -f b,d,f -a all --csv -o data_csv/F7_bdf.csv
+python3 -m lethe forget F7 -f b,d,f -a all --csv --groups -o data_csv/F7_bdf_groups.csv
+python3 -m lethe forget F7 -f b,e,f -a all --csv -o data_csv/F7_bef.csv
+python3 -m lethe forget F7 -f b,e,f -a all --csv --groups -o data_csv/F7_bef_groups.csv
+python3 -m lethe forget F7 -f c,d,e -a all --csv -o data_csv/F7_cde.csv
+python3 -m lethe forget F7 -f c,d,e -a all --csv --groups -o data_csv/F7_cde_groups.csv
+python3 -m lethe forget F7 -f c,d,f -a all --csv -o data_csv/F7_cdf.csv
+python3 -m lethe forget F7 -f c,d,f -a all --csv --groups -o data_csv/F7_cdf_groups.csv
+python3 -m lethe forget F7 -f c,e,f -a all --csv -o data_csv/F7_cef.csv
+python3 -m lethe forget F7 -f c,e,f -a all --csv --groups -o data_csv/F7_cef_groups.csv
+python3 -m lethe forget F7 -f d,e,f -a all --csv -o data_csv/F7_def.csv
+python3 -m lethe forget F7 -f d,e,f -a all --csv --groups -o data_csv/F7_def_groups.csv
+python3 -m lethe forget F7 -f a,b,c,d -a all --csv -o data_csv/F7_abcd.csv
+python3 -m lethe forget F7 -f a,b,c,d -a all --csv --groups -o data_csv/F7_abcd_groups.csv
+python3 -m lethe forget F7 -f a,b,c,e -a all --csv -o data_csv/F7_abce.csv
+python3 -m lethe forget F7 -f a,b,c,e -a all --csv --groups -o data_csv/F7_abce_groups.csv
+python3 -m lethe forget F7 -f a,b,c,f -a all --csv -o data_csv/F7_abcf.csv
+python3 -m lethe forget F7 -f a,b,c,f -a all --csv --groups -o data_csv/F7_abcf_groups.csv
+python3 -m lethe forget F7 -f a,b,d,e -a all --csv -o data_csv/F7_abde.csv
+python3 -m lethe forget F7 -f a,b,d,e -a all --csv --groups -o data_csv/F7_abde_groups.csv
+python3 -m lethe forget F7 -f a,b,d,f -a all --csv -o data_csv/F7_abdf.csv
+python3 -m lethe forget F7 -f a,b,d,f -a all --csv --groups -o data_csv/F7_abdf_groups.csv
+python3 -m lethe forget F7 -f a,b,e,f -a all --csv -o data_csv/F7_abef.csv
+python3 -m lethe forget F7 -f a,b,e,f -a all --csv --groups -o data_csv/F7_abef_groups.csv
+python3 -m lethe forget F7 -f a,c,d,e -a all --csv -o data_csv/F7_acde.csv
+python3 -m lethe forget F7 -f a,c,d,e -a all --csv --groups -o data_csv/F7_acde_groups.csv
+python3 -m lethe forget F7 -f a,c,d,f -a all --csv -o data_csv/F7_acdf.csv
+python3 -m lethe forget F7 -f a,c,d,f -a all --csv --groups -o data_csv/F7_acdf_groups.csv
+python3 -m lethe forget F7 -f a,c,e,f -a all --csv -o data_csv/F7_acef.csv
+python3 -m lethe forget F7 -f a,c,e,f -a all --csv --groups -o data_csv/F7_acef_groups.csv
+python3 -m lethe forget F7 -f a,d,e,f -a all --csv -o data_csv/F7_adef.csv
+python3 -m lethe forget F7 -f a,d,e,f -a all --csv --groups -o data_csv/F7_adef_groups.csv
+python3 -m lethe forget F7 -f b,c,d,e -a all --csv -o data_csv/F7_bcde.csv
+python3 -m lethe forget F7 -f b,c,d,e -a all --csv --groups -o data_csv/F7_bcde_groups.csv
+python3 -m lethe forget F7 -f b,c,d,f -a all --csv -o data_csv/F7_bcdf.csv
+python3 -m lethe forget F7 -f b,c,d,f -a all --csv --groups -o data_csv/F7_bcdf_groups.csv
+python3 -m lethe forget F7 -f b,c,e,f -a all --csv -o data_csv/F7_bcef.csv
+python3 -m lethe forget F7 -f b,c,e,f -a all --csv --groups -o data_csv/F7_bcef_groups.csv
+python3 -m lethe forget F7 -f b,d,e,f -a all --csv -o data_csv/F7_bdef.csv
+python3 -m lethe forget F7 -f b,d,e,f -a all --csv --groups -o data_csv/F7_bdef_groups.csv
+python3 -m lethe forget F7 -f c,d,e,f -a all --csv -o data_csv/F7_cdef.csv
+python3 -m lethe forget F7 -f c,d,e,f -a all --csv --groups -o data_csv/F7_cdef_groups.csv
+python3 -m lethe forget F7 -f a,b,c,d,e -a all --csv -o data_csv/F7_abcde.csv
+python3 -m lethe forget F7 -f a,b,c,d,e -a all --csv --groups -o data_csv/F7_abcde_groups.csv
+python3 -m lethe forget F7 -f a,b,c,d,f -a all --csv -o data_csv/F7_abcdf.csv
+python3 -m lethe forget F7 -f a,b,c,d,f -a all --csv --groups -o data_csv/F7_abcdf_groups.csv
+python3 -m lethe forget F7 -f a,b,c,e,f -a all --csv -o data_csv/F7_abcef.csv
+python3 -m lethe forget F7 -f a,b,c,e,f -a all --csv --groups -o data_csv/F7_abcef_groups.csv
+python3 -m lethe forget F7 -f a,b,d,e,f -a all --csv -o data_csv/F7_abdef.csv
+python3 -m lethe forget F7 -f a,b,d,e,f -a all --csv --groups -o data_csv/F7_abdef_groups.csv
+python3 -m lethe forget F7 -f a,c,d,e,f -a all --csv -o data_csv/F7_acdef.csv
+python3 -m lethe forget F7 -f a,c,d,e,f -a all --csv --groups -o data_csv/F7_acdef_groups.csv
+python3 -m lethe forget F7 -f b,c,d,e,f -a all --csv -o data_csv/F7_bcdef.csv
+python3 -m lethe forget F7 -f b,c,d,e,f -a all --csv --groups -o data_csv/F7_bcdef_groups.csv
