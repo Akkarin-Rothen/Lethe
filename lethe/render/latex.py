@@ -95,7 +95,7 @@ def truth_table(
     table: TruthTable,
     *,
     caption: str | None = None,
-    label: str = "tab:truthtab",
+    label: str | None = None,
 ) -> str:
     header = []
     for atom in table.atom_names:
@@ -111,6 +111,9 @@ def truth_table(
     # to_latex, not str, so it reads (a \lor b) \land c
     if caption is None:
         caption = f"Truth table for ${table.formula.to_latex()}$."
+    # None means "not chosen by the caller", so the default label lives only here
+    if label is None:
+        label = "tab:truthtab"
 
     return _document(
         header,
@@ -200,6 +203,75 @@ def forget_table(
         header,
         rows,
         column_spec=_column_spec(len(result.atom_names), extra),
+        caption=caption,
+        label=label,
+    )
+
+
+# one row per group instead of one row per interpretation
+# the kept atoms name the group, $c_1$ is the number of true rows, $n$ the group size,
+# then one column per aggregate, as in the definition of Th_k
+# group i gets the same colour as in forget_table, so both tables read side by side
+# example: forgetting b and c from (a | b) & c gives two data rows and the spec |c|c|c|c|c|c|c|
+def group_table(
+    result: ForgetResult,
+    *,
+    caption: str | None = None,
+    label: str | None = None,
+    colour_groups: bool = True,
+    show_var_forget: bool = True,
+) -> str:
+    header = []
+    for atom in result.kept:
+        header.append(_bold(atom))
+    header.append("$c_1$")
+    header.append("$n$")
+    for name in result.column_names():
+        header.append(_bold(column_title(name)))
+    if show_var_forget:
+        header.append(_bold("VarForget"))
+
+    rows = []
+    for position, group in enumerate(result.groups):
+        # % wraps around when there are more groups than colours
+        colour = GROUP_COLOURS[position % len(GROUP_COLOURS)]
+        if colour_groups:
+            prefix = rf"\rowcolor{{{colour}}} "
+        else:
+            prefix = EMPTY
+
+        cells = _cells(group.key)
+        cells.append(str(group.true_count()))
+        cells.append(str(group.size()))
+
+        for name in result.column_names():
+            cells.append(_cell(result.values_of(name)[position]))
+
+        if show_var_forget:
+            cells.append(_cell(result.var_forget_values[position]))
+
+        rows.append(_row(cells, prefix))
+
+    # no formula column here, but two count columns: kept atoms + 2 + aggregates
+    # _column_spec counts atoms + 1 + extra, so the second count column goes into extra
+    extra = len(result.column_names()) + 1
+    if show_var_forget:
+        extra = extra + 1
+
+    if caption is None:
+        forgotten = ", ".join(result.forgotten)
+        formula = result.formula.to_latex()
+        caption = (
+            rf"Groups after forgetting $\{{{forgotten}\}}$ in $A = {formula}$."
+        )
+    # None means "not chosen by the caller", so the default label lives only here
+    if label is None:
+        label = "tab:groupsforg"
+
+    return _document(
+        header,
+        rows,
+        column_spec=_column_spec(len(result.kept), extra),
         caption=caption,
         label=label,
     )

@@ -169,6 +169,38 @@ def forget_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
     return _table(header, rows, notes)
 
 
+# one row per group instead of one row per interpretation
+# the kept atoms name the group, true_rows is c_1 in the thesis, group_size is n,
+# then one column per aggregate; no notes, the row already is the group
+# example: forgetting b and c from (a | b) & c gives two rows
+#   a | true_rows | group_size | max | min | maj | VarForget
+#   0 |     1     |     4      |  1  |  0  |  0  |     1
+#   1 |     2     |     4      |  1  |  0  |  1  |     1
+def group_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
+    header = list(result.kept)
+    header.append("true_rows")
+    header.append("group_size")
+    for name in result.column_names():
+        header.append(column_title(name))
+    if show_var_forget:
+        header.append("VarForget")
+
+    rows = []
+    for position, group in enumerate(result.groups):
+        cells = _cells(group.key)
+        cells.append(str(group.true_count()))
+        cells.append(str(group.size()))
+
+        for name in result.column_names():
+            cells.append(_cell(result.values_of(name)[position]))
+
+        if show_var_forget:
+            cells.append(_cell(result.var_forget_values[position]))
+
+        rows.append(cells)
+    return _table(header, rows)
+
+
 # a short report on one forgetting run, one fact per line
 # example: it names the formula, the atoms, the group size and which aggregate agrees
 def summary(result: ForgetResult) -> str:

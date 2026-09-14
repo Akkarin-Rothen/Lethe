@@ -3,6 +3,9 @@
 
 from __future__ import annotations
 
+# shown by python3 -m lethe --version
+__version__ = "0.1.0"
+
 from .aggregation import majority, maximum, minimum, threshold
 from .formulas import CATALOG
 from .forgetting import var_forget
