@@ -1,0 +1,51 @@
+\begin{table}[!tb]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{a} & \textbf{b} & \textbf{c} & \textbf{d} & \textbf{A} \\ \hline
+        0 & 0 & 0 & 0 & 0 \\ \hline
+        0 & 0 & 0 & 1 & 1 \\ \hline
+        0 & 0 & 1 & 0 & 1 \\ \hline
+        0 & 0 & 1 & 1 & 1 \\ \hline
+        0 & 1 & 0 & 0 & 1 \\ \hline
+        0 & 1 & 0 & 1 & 1 \\ \hline
+        0 & 1 & 1 & 0 & 1 \\ \hline
+        0 & 1 & 1 & 1 & 1 \\ \hline
+        1 & 0 & 0 & 0 & 1 \\ \hline
+        1 & 0 & 0 & 1 & 1 \\ \hline
+        1 & 0 & 1 & 0 & 1 \\ \hline
+        1 & 0 & 1 & 1 & 1 \\ \hline
+        1 & 1 & 0 & 0 & 1 \\ \hline
+        1 & 1 & 0 & 1 & 1 \\ \hline
+        1 & 1 & 1 & 0 & 1 \\ \hline
+        1 & 1 & 1 & 1 & 1 \\ \hline
+    \end{tabular}
+    \caption{Truth table for $a \lor b \lor c \lor d$.}
+    \label{tab:truthtab}
+\end{table}
+
+\begin{table}[!tb]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{a} & \textbf{b} & \textbf{c} & \textbf{d} & \textbf{A} & \textbf{max} & \textbf{min} & \textbf{maj} & \textbf{th1} & \textbf{th2} & \textbf{th3} & \textbf{th4} & \textbf{VarForget} \\ \hline
+        \rowcolor{gray!40} 0 & 0 &  &  & 0 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{gray!40} 0 & 0 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{gray!40} 0 & 0 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{gray!40} 0 & 0 &  &  & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 1 \\ \hline
+        \rowcolor{blue!40} 0 & 1 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{blue!40} 0 & 1 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{blue!40} 0 & 1 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{blue!40} 0 & 1 &  &  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+        \rowcolor{red!40} 1 & 0 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{red!40} 1 & 0 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{red!40} 1 & 0 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{red!40} 1 & 0 &  &  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+        \rowcolor{green!40} 1 & 1 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{green!40} 1 & 1 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{green!40} 1 & 1 &  &  & 1 &  &  &  &  &  &  &  &  \\ \hline
+        \rowcolor{green!40} 1 & 1 &  &  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+    \end{tabular}
+    \caption{Lethe: Forgetting $\{c, d\}$ in $F_{3} = a \lor b \lor c \lor d$.}
+    \label{tab:lethe-F3-cd}
+\end{table}

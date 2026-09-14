@@ -1,0 +1,37 @@
+\begin{table}[!tb]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \textbf{a} & \textbf{b} & \textbf{c} & \textbf{d} & \textbf{A} \\ \hline
+        0 & 0 & 0 & 0 & 1 \\ \hline
+        0 & 0 & 0 & 1 & 1 \\ \hline
+        0 & 0 & 1 & 0 & 1 \\ \hline
+        0 & 0 & 1 & 1 & 1 \\ \hline
+        0 & 1 & 0 & 0 & 1 \\ \hline
+        0 & 1 & 0 & 1 & 1 \\ \hline
+        0 & 1 & 1 & 0 & 1 \\ \hline
+        0 & 1 & 1 & 1 & 1 \\ \hline
+        1 & 0 & 0 & 0 & 1 \\ \hline
+        1 & 0 & 0 & 1 & 1 \\ \hline
+        1 & 0 & 1 & 0 & 1 \\ \hline
+        1 & 0 & 1 & 1 & 1 \\ \hline
+        1 & 1 & 0 & 0 & 0 \\ \hline
+        1 & 1 & 0 & 1 & 1 \\ \hline
+        1 & 1 & 1 & 0 & 1 \\ \hline
+        1 & 1 & 1 & 1 & 1 \\ \hline
+    \end{tabular}
+    \caption{Truth table for $a \land b \rightarrow c \lor d$.}
+    \label{tab:truthtab}
+\end{table}
+
+\begin{table}[!tb]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+        \hline
+        \textbf{a} & \textbf{true\_rows} & \textbf{group\_size} & \textbf{max} & \textbf{min} & \textbf{maj} & \textbf{th1} & \textbf{th2} & \textbf{th3} & \textbf{th4} & \textbf{th5} & \textbf{th6} & \textbf{th7} & \textbf{th8} & \textbf{VarForget} \\ \hline
+        \rowcolor{gray!40} 0 & 8 & 8 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ \hline
+        \rowcolor{blue!40} 1 & 7 & 8 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 \\ \hline
+    \end{tabular}
+    \caption{Lethe: Groups after forgetting $\{b, c, d\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.}
+    \label{tab:lethe-F4-bcd-groups}
+\end{table}
