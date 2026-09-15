@@ -114,7 +114,6 @@ def forget_table(result: ForgetResult, *, show_var_forget: bool = True) -> str:
 
 # one row per group instead of one row per interpretation
 # this is the table the aggregates are computed from: the kept atoms name the group,
-# true_rows is c_1 in the thesis, group_size is n, then one column per aggregate
 # example: forgetting b and c from (a | b) & c gives two rows
 #   a,true_rows,group_size,max,min,maj,VarForget
 #   0,1,4,1,0,0,1
