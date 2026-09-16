@@ -146,8 +146,6 @@ def forget(
             kept.append(atom)
     kept = tuple(kept)
 
-    # if not kept:
-    #     raise ValueError("forgetting every atom leaves nothing to group by")
 
     table = TruthTable.build(formula, atom_names)
     groups = _group_rows(table, kept)
