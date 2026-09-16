@@ -11,6 +11,8 @@ python3 -m lethe forget F1 -f a,c -a all --latex --caption 'Lethe: Forgetting $\
 python3 -m lethe forget F1 -f a,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c\}$ in $F_{1} = (a \lor b) \land c$.' --label tab:lethe-F1-ac-groups -o data_latex/F1_ac_groups.tex
 python3 -m lethe forget F1 -f b,c -a all --latex --caption 'Lethe: Forgetting $\{b, c\}$ in $F_{1} = (a \lor b) \land c$.' --label tab:lethe-F1-bc -o data_latex/F1_bc.tex
 python3 -m lethe forget F1 -f b,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c\}$ in $F_{1} = (a \lor b) \land c$.' --label tab:lethe-F1-bc-groups -o data_latex/F1_bc_groups.tex
+python3 -m lethe forget F1 -f a,b,c -a all --latex --caption 'Lethe: Forgetting $\{a, b, c\}$ in $F_{1} = (a \lor b) \land c$.' --label tab:lethe-F1-abc -o data_latex/F1_abc.tex
+python3 -m lethe forget F1 -f a,b,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c\}$ in $F_{1} = (a \lor b) \land c$.' --label tab:lethe-F1-abc-groups -o data_latex/F1_abc_groups.tex
 python3 -m lethe table F2 --latex -o data_latex/F2_table.tex
 python3 -m lethe forget F2 -f a -a all --latex --caption 'Lethe: Forgetting $\{a\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-a -o data_latex/F2_a.tex
 python3 -m lethe forget F2 -f a -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-a-groups -o data_latex/F2_a_groups.tex
@@ -40,6 +42,8 @@ python3 -m lethe forget F2 -f a,c,d -a all --latex --caption 'Lethe: Forgetting 
 python3 -m lethe forget F2 -f a,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c, d\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-acd-groups -o data_latex/F2_acd_groups.tex
 python3 -m lethe forget F2 -f b,c,d -a all --latex --caption 'Lethe: Forgetting $\{b, c, d\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-bcd -o data_latex/F2_bcd.tex
 python3 -m lethe forget F2 -f b,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c, d\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-bcd-groups -o data_latex/F2_bcd_groups.tex
+python3 -m lethe forget F2 -f a,b,c,d -a all --latex --caption 'Lethe: Forgetting $\{a, b, c, d\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-abcd -o data_latex/F2_abcd.tex
+python3 -m lethe forget F2 -f a,b,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c, d\}$ in $F_{2} = a \land b \land c \land d$.' --label tab:lethe-F2-abcd-groups -o data_latex/F2_abcd_groups.tex
 python3 -m lethe table F3 --latex -o data_latex/F3_table.tex
 python3 -m lethe forget F3 -f a -a all --latex --caption 'Lethe: Forgetting $\{a\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-a -o data_latex/F3_a.tex
 python3 -m lethe forget F3 -f a -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-a-groups -o data_latex/F3_a_groups.tex
@@ -69,6 +73,8 @@ python3 -m lethe forget F3 -f a,c,d -a all --latex --caption 'Lethe: Forgetting 
 python3 -m lethe forget F3 -f a,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c, d\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-acd-groups -o data_latex/F3_acd_groups.tex
 python3 -m lethe forget F3 -f b,c,d -a all --latex --caption 'Lethe: Forgetting $\{b, c, d\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-bcd -o data_latex/F3_bcd.tex
 python3 -m lethe forget F3 -f b,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c, d\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-bcd-groups -o data_latex/F3_bcd_groups.tex
+python3 -m lethe forget F3 -f a,b,c,d -a all --latex --caption 'Lethe: Forgetting $\{a, b, c, d\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-abcd -o data_latex/F3_abcd.tex
+python3 -m lethe forget F3 -f a,b,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c, d\}$ in $F_{3} = a \lor b \lor c \lor d$.' --label tab:lethe-F3-abcd-groups -o data_latex/F3_abcd_groups.tex
 python3 -m lethe table F4 --latex -o data_latex/F4_table.tex
 python3 -m lethe forget F4 -f a -a all --latex --caption 'Lethe: Forgetting $\{a\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-a -o data_latex/F4_a.tex
 python3 -m lethe forget F4 -f a -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-a-groups -o data_latex/F4_a_groups.tex
@@ -98,6 +104,8 @@ python3 -m lethe forget F4 -f a,c,d -a all --latex --caption 'Lethe: Forgetting 
 python3 -m lethe forget F4 -f a,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c, d\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-acd-groups -o data_latex/F4_acd_groups.tex
 python3 -m lethe forget F4 -f b,c,d -a all --latex --caption 'Lethe: Forgetting $\{b, c, d\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-bcd -o data_latex/F4_bcd.tex
 python3 -m lethe forget F4 -f b,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c, d\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-bcd-groups -o data_latex/F4_bcd_groups.tex
+python3 -m lethe forget F4 -f a,b,c,d -a all --latex --caption 'Lethe: Forgetting $\{a, b, c, d\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-abcd -o data_latex/F4_abcd.tex
+python3 -m lethe forget F4 -f a,b,c,d -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c, d\}$ in $F_{4} = (a \land b) \rightarrow (c \lor d)$.' --label tab:lethe-F4-abcd-groups -o data_latex/F4_abcd_groups.tex
 python3 -m lethe table F5 --latex -o data_latex/F5_table.tex
 python3 -m lethe forget F5 -f a -a all --latex --caption 'Lethe: Forgetting $\{a\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-a -o data_latex/F5_a.tex
 python3 -m lethe forget F5 -f a -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-a-groups -o data_latex/F5_a_groups.tex
@@ -111,6 +119,8 @@ python3 -m lethe forget F5 -f a,c -a all --latex --caption 'Lethe: Forgetting $\
 python3 -m lethe forget F5 -f a,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-ac-groups -o data_latex/F5_ac_groups.tex
 python3 -m lethe forget F5 -f b,c -a all --latex --caption 'Lethe: Forgetting $\{b, c\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-bc -o data_latex/F5_bc.tex
 python3 -m lethe forget F5 -f b,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-bc-groups -o data_latex/F5_bc_groups.tex
+python3 -m lethe forget F5 -f a,b,c -a all --latex --caption 'Lethe: Forgetting $\{a, b, c\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-abc -o data_latex/F5_abc.tex
+python3 -m lethe forget F5 -f a,b,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c\}$ in $F_{5} = (a \leftrightarrow b) \leftrightarrow c$.' --label tab:lethe-F5-abc-groups -o data_latex/F5_abc_groups.tex
 python3 -m lethe table F6 --latex -o data_latex/F6_table.tex
 python3 -m lethe forget F6 -f a -a all --latex --caption 'Lethe: Forgetting $\{a\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-a -o data_latex/F6_a.tex
 python3 -m lethe forget F6 -f a -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-a-groups -o data_latex/F6_a_groups.tex
@@ -124,6 +134,8 @@ python3 -m lethe forget F6 -f a,c -a all --latex --caption 'Lethe: Forgetting $\
 python3 -m lethe forget F6 -f a,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-ac-groups -o data_latex/F6_ac_groups.tex
 python3 -m lethe forget F6 -f b,c -a all --latex --caption 'Lethe: Forgetting $\{b, c\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-bc -o data_latex/F6_bc.tex
 python3 -m lethe forget F6 -f b,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-bc-groups -o data_latex/F6_bc_groups.tex
+python3 -m lethe forget F6 -f a,b,c -a all --latex --caption 'Lethe: Forgetting $\{a, b, c\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-abc -o data_latex/F6_abc.tex
+python3 -m lethe forget F6 -f a,b,c -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c\}$ in $F_{6} = (a \land b \land c) \lor (a \land \lnot b \land c)$.' --label tab:lethe-F6-abc-groups -o data_latex/F6_abc_groups.tex
 python3 -m lethe table F7 --latex -o data_latex/F7_table.tex
 python3 -m lethe forget F7 -f a -a all --latex --caption 'Lethe: Forgetting $\{a\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-a -o data_latex/F7_a.tex
 python3 -m lethe forget F7 -f a -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-a-groups -o data_latex/F7_a_groups.tex
@@ -249,3 +261,5 @@ python3 -m lethe forget F7 -f a,c,d,e,f -a all --latex --caption 'Lethe: Forgett
 python3 -m lethe forget F7 -f a,c,d,e,f -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, c, d, e, f\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-acdef-groups -o data_latex/F7_acdef_groups.tex
 python3 -m lethe forget F7 -f b,c,d,e,f -a all --latex --caption 'Lethe: Forgetting $\{b, c, d, e, f\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-bcdef -o data_latex/F7_bcdef.tex
 python3 -m lethe forget F7 -f b,c,d,e,f -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{b, c, d, e, f\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-bcdef-groups -o data_latex/F7_bcdef_groups.tex
+python3 -m lethe forget F7 -f a,b,c,d,e,f -a all --latex --caption 'Lethe: Forgetting $\{a, b, c, d, e, f\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-abcdef -o data_latex/F7_abcdef.tex
+python3 -m lethe forget F7 -f a,b,c,d,e,f -a all --latex --groups --caption 'Lethe: Groups after forgetting $\{a, b, c, d, e, f\}$ in $F_{7} = (a \lor b) \land (c \lor d) \land (e \lor f)$.' --label tab:lethe-F7-abcdef-groups -o data_latex/F7_abcdef_groups.tex

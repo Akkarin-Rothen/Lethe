@@ -1,0 +1,38 @@
+formula        (a | b) & c
+atoms          {a, b, c}
+forgotten      {a, b, c}
+kept           {}
+group size     8
+VarForget      1
+  max        agrees with VarForget
+  min        differs from VarForget
+  maj        differs from VarForget
+  th1        agrees with VarForget
+  th2        agrees with VarForget
+  th3        agrees with VarForget
+  th4        differs from VarForget
+  th5        differs from VarForget
+  th6        differs from VarForget
+  th7        differs from VarForget
+  th8        differs from VarForget
+
+before forgetting:
++---+---+---+-------------+
+| a | b | c | (a | b) & c |
++---+---+---+-------------+
+| 0 | 0 | 0 |      0      |
+| 0 | 0 | 1 |      0      |
+| 0 | 1 | 0 |      0      |
+| 0 | 1 | 1 |      1      |
+| 1 | 0 | 0 |      0      |
+| 1 | 0 | 1 |      1      |
+| 1 | 1 | 0 |      0      |
+| 1 | 1 | 1 |      1      |
++---+---+---+-------------+
+
+after forgetting {a, b, c}:
++-----------+------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----------+
+| true_rows | group_size | max | min | maj | th1 | th2 | th3 | th4 | th5 | th6 | th7 | th8 | VarForget |
++-----------+------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----------+
+|     3     |     8      |  1  |  0  |  0  |  1  |  1  |  1  |  0  |  0  |  0  |  0  |  0  |     1     |
++-----------+------------+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----------+

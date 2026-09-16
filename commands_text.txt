@@ -11,6 +11,8 @@ python3 -m lethe forget F1 -f a,c -a all -o data_text/F1_ac.txt
 python3 -m lethe forget F1 -f a,c -a all --groups -o data_text/F1_ac_groups.txt
 python3 -m lethe forget F1 -f b,c -a all -o data_text/F1_bc.txt
 python3 -m lethe forget F1 -f b,c -a all --groups -o data_text/F1_bc_groups.txt
+python3 -m lethe forget F1 -f a,b,c -a all -o data_text/F1_abc.txt
+python3 -m lethe forget F1 -f a,b,c -a all --groups -o data_text/F1_abc_groups.txt
 python3 -m lethe table F2 -o data_text/F2_table.txt
 python3 -m lethe forget F2 -f a -a all -o data_text/F2_a.txt
 python3 -m lethe forget F2 -f a -a all --groups -o data_text/F2_a_groups.txt
@@ -40,6 +42,8 @@ python3 -m lethe forget F2 -f a,c,d -a all -o data_text/F2_acd.txt
 python3 -m lethe forget F2 -f a,c,d -a all --groups -o data_text/F2_acd_groups.txt
 python3 -m lethe forget F2 -f b,c,d -a all -o data_text/F2_bcd.txt
 python3 -m lethe forget F2 -f b,c,d -a all --groups -o data_text/F2_bcd_groups.txt
+python3 -m lethe forget F2 -f a,b,c,d -a all -o data_text/F2_abcd.txt
+python3 -m lethe forget F2 -f a,b,c,d -a all --groups -o data_text/F2_abcd_groups.txt
 python3 -m lethe table F3 -o data_text/F3_table.txt
 python3 -m lethe forget F3 -f a -a all -o data_text/F3_a.txt
 python3 -m lethe forget F3 -f a -a all --groups -o data_text/F3_a_groups.txt
@@ -69,6 +73,8 @@ python3 -m lethe forget F3 -f a,c,d -a all -o data_text/F3_acd.txt
 python3 -m lethe forget F3 -f a,c,d -a all --groups -o data_text/F3_acd_groups.txt
 python3 -m lethe forget F3 -f b,c,d -a all -o data_text/F3_bcd.txt
 python3 -m lethe forget F3 -f b,c,d -a all --groups -o data_text/F3_bcd_groups.txt
+python3 -m lethe forget F3 -f a,b,c,d -a all -o data_text/F3_abcd.txt
+python3 -m lethe forget F3 -f a,b,c,d -a all --groups -o data_text/F3_abcd_groups.txt
 python3 -m lethe table F4 -o data_text/F4_table.txt
 python3 -m lethe forget F4 -f a -a all -o data_text/F4_a.txt
 python3 -m lethe forget F4 -f a -a all --groups -o data_text/F4_a_groups.txt
@@ -98,6 +104,8 @@ python3 -m lethe forget F4 -f a,c,d -a all -o data_text/F4_acd.txt
 python3 -m lethe forget F4 -f a,c,d -a all --groups -o data_text/F4_acd_groups.txt
 python3 -m lethe forget F4 -f b,c,d -a all -o data_text/F4_bcd.txt
 python3 -m lethe forget F4 -f b,c,d -a all --groups -o data_text/F4_bcd_groups.txt
+python3 -m lethe forget F4 -f a,b,c,d -a all -o data_text/F4_abcd.txt
+python3 -m lethe forget F4 -f a,b,c,d -a all --groups -o data_text/F4_abcd_groups.txt
 python3 -m lethe table F5 -o data_text/F5_table.txt
 python3 -m lethe forget F5 -f a -a all -o data_text/F5_a.txt
 python3 -m lethe forget F5 -f a -a all --groups -o data_text/F5_a_groups.txt
@@ -111,6 +119,8 @@ python3 -m lethe forget F5 -f a,c -a all -o data_text/F5_ac.txt
 python3 -m lethe forget F5 -f a,c -a all --groups -o data_text/F5_ac_groups.txt
 python3 -m lethe forget F5 -f b,c -a all -o data_text/F5_bc.txt
 python3 -m lethe forget F5 -f b,c -a all --groups -o data_text/F5_bc_groups.txt
+python3 -m lethe forget F5 -f a,b,c -a all -o data_text/F5_abc.txt
+python3 -m lethe forget F5 -f a,b,c -a all --groups -o data_text/F5_abc_groups.txt
 python3 -m lethe table F6 -o data_text/F6_table.txt
 python3 -m lethe forget F6 -f a -a all -o data_text/F6_a.txt
 python3 -m lethe forget F6 -f a -a all --groups -o data_text/F6_a_groups.txt
@@ -124,6 +134,8 @@ python3 -m lethe forget F6 -f a,c -a all -o data_text/F6_ac.txt
 python3 -m lethe forget F6 -f a,c -a all --groups -o data_text/F6_ac_groups.txt
 python3 -m lethe forget F6 -f b,c -a all -o data_text/F6_bc.txt
 python3 -m lethe forget F6 -f b,c -a all --groups -o data_text/F6_bc_groups.txt
+python3 -m lethe forget F6 -f a,b,c -a all -o data_text/F6_abc.txt
+python3 -m lethe forget F6 -f a,b,c -a all --groups -o data_text/F6_abc_groups.txt
 python3 -m lethe table F7 -o data_text/F7_table.txt
 python3 -m lethe forget F7 -f a -a all -o data_text/F7_a.txt
 python3 -m lethe forget F7 -f a -a all --groups -o data_text/F7_a_groups.txt
@@ -249,3 +261,5 @@ python3 -m lethe forget F7 -f a,c,d,e,f -a all -o data_text/F7_acdef.txt
 python3 -m lethe forget F7 -f a,c,d,e,f -a all --groups -o data_text/F7_acdef_groups.txt
 python3 -m lethe forget F7 -f b,c,d,e,f -a all -o data_text/F7_bcdef.txt
 python3 -m lethe forget F7 -f b,c,d,e,f -a all --groups -o data_text/F7_bcdef_groups.txt
+python3 -m lethe forget F7 -f a,b,c,d,e,f -a all -o data_text/F7_abcdef.txt
+python3 -m lethe forget F7 -f a,b,c,d,e,f -a all --groups -o data_text/F7_abcdef_groups.txt

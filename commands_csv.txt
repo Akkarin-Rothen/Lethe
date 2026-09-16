@@ -11,6 +11,8 @@ python3 -m lethe forget F1 -f a,c -a all --csv -o data_csv/F1_ac.csv
 python3 -m lethe forget F1 -f a,c -a all --csv --groups -o data_csv/F1_ac_groups.csv
 python3 -m lethe forget F1 -f b,c -a all --csv -o data_csv/F1_bc.csv
 python3 -m lethe forget F1 -f b,c -a all --csv --groups -o data_csv/F1_bc_groups.csv
+python3 -m lethe forget F1 -f a,b,c -a all --csv -o data_csv/F1_abc.csv
+python3 -m lethe forget F1 -f a,b,c -a all --csv --groups -o data_csv/F1_abc_groups.csv
 python3 -m lethe table F2 --csv -o data_csv/F2_table.csv
 python3 -m lethe forget F2 -f a -a all --csv -o data_csv/F2_a.csv
 python3 -m lethe forget F2 -f a -a all --csv --groups -o data_csv/F2_a_groups.csv
@@ -40,6 +42,8 @@ python3 -m lethe forget F2 -f a,c,d -a all --csv -o data_csv/F2_acd.csv
 python3 -m lethe forget F2 -f a,c,d -a all --csv --groups -o data_csv/F2_acd_groups.csv
 python3 -m lethe forget F2 -f b,c,d -a all --csv -o data_csv/F2_bcd.csv
 python3 -m lethe forget F2 -f b,c,d -a all --csv --groups -o data_csv/F2_bcd_groups.csv
+python3 -m lethe forget F2 -f a,b,c,d -a all --csv -o data_csv/F2_abcd.csv
+python3 -m lethe forget F2 -f a,b,c,d -a all --csv --groups -o data_csv/F2_abcd_groups.csv
 python3 -m lethe table F3 --csv -o data_csv/F3_table.csv
 python3 -m lethe forget F3 -f a -a all --csv -o data_csv/F3_a.csv
 python3 -m lethe forget F3 -f a -a all --csv --groups -o data_csv/F3_a_groups.csv
@@ -69,6 +73,8 @@ python3 -m lethe forget F3 -f a,c,d -a all --csv -o data_csv/F3_acd.csv
 python3 -m lethe forget F3 -f a,c,d -a all --csv --groups -o data_csv/F3_acd_groups.csv
 python3 -m lethe forget F3 -f b,c,d -a all --csv -o data_csv/F3_bcd.csv
 python3 -m lethe forget F3 -f b,c,d -a all --csv --groups -o data_csv/F3_bcd_groups.csv
+python3 -m lethe forget F3 -f a,b,c,d -a all --csv -o data_csv/F3_abcd.csv
+python3 -m lethe forget F3 -f a,b,c,d -a all --csv --groups -o data_csv/F3_abcd_groups.csv
 python3 -m lethe table F4 --csv -o data_csv/F4_table.csv
 python3 -m lethe forget F4 -f a -a all --csv -o data_csv/F4_a.csv
 python3 -m lethe forget F4 -f a -a all --csv --groups -o data_csv/F4_a_groups.csv
@@ -98,6 +104,8 @@ python3 -m lethe forget F4 -f a,c,d -a all --csv -o data_csv/F4_acd.csv
 python3 -m lethe forget F4 -f a,c,d -a all --csv --groups -o data_csv/F4_acd_groups.csv
 python3 -m lethe forget F4 -f b,c,d -a all --csv -o data_csv/F4_bcd.csv
 python3 -m lethe forget F4 -f b,c,d -a all --csv --groups -o data_csv/F4_bcd_groups.csv
+python3 -m lethe forget F4 -f a,b,c,d -a all --csv -o data_csv/F4_abcd.csv
+python3 -m lethe forget F4 -f a,b,c,d -a all --csv --groups -o data_csv/F4_abcd_groups.csv
 python3 -m lethe table F5 --csv -o data_csv/F5_table.csv
 python3 -m lethe forget F5 -f a -a all --csv -o data_csv/F5_a.csv
 python3 -m lethe forget F5 -f a -a all --csv --groups -o data_csv/F5_a_groups.csv
@@ -111,6 +119,8 @@ python3 -m lethe forget F5 -f a,c -a all --csv -o data_csv/F5_ac.csv
 python3 -m lethe forget F5 -f a,c -a all --csv --groups -o data_csv/F5_ac_groups.csv
 python3 -m lethe forget F5 -f b,c -a all --csv -o data_csv/F5_bc.csv
 python3 -m lethe forget F5 -f b,c -a all --csv --groups -o data_csv/F5_bc_groups.csv
+python3 -m lethe forget F5 -f a,b,c -a all --csv -o data_csv/F5_abc.csv
+python3 -m lethe forget F5 -f a,b,c -a all --csv --groups -o data_csv/F5_abc_groups.csv
 python3 -m lethe table F6 --csv -o data_csv/F6_table.csv
 python3 -m lethe forget F6 -f a -a all --csv -o data_csv/F6_a.csv
 python3 -m lethe forget F6 -f a -a all --csv --groups -o data_csv/F6_a_groups.csv
@@ -124,6 +134,8 @@ python3 -m lethe forget F6 -f a,c -a all --csv -o data_csv/F6_ac.csv
 python3 -m lethe forget F6 -f a,c -a all --csv --groups -o data_csv/F6_ac_groups.csv
 python3 -m lethe forget F6 -f b,c -a all --csv -o data_csv/F6_bc.csv
 python3 -m lethe forget F6 -f b,c -a all --csv --groups -o data_csv/F6_bc_groups.csv
+python3 -m lethe forget F6 -f a,b,c -a all --csv -o data_csv/F6_abc.csv
+python3 -m lethe forget F6 -f a,b,c -a all --csv --groups -o data_csv/F6_abc_groups.csv
 python3 -m lethe table F7 --csv -o data_csv/F7_table.csv
 python3 -m lethe forget F7 -f a -a all --csv -o data_csv/F7_a.csv
 python3 -m lethe forget F7 -f a -a all --csv --groups -o data_csv/F7_a_groups.csv
@@ -249,3 +261,5 @@ python3 -m lethe forget F7 -f a,c,d,e,f -a all --csv -o data_csv/F7_acdef.csv
 python3 -m lethe forget F7 -f a,c,d,e,f -a all --csv --groups -o data_csv/F7_acdef_groups.csv
 python3 -m lethe forget F7 -f b,c,d,e,f -a all --csv -o data_csv/F7_bcdef.csv
 python3 -m lethe forget F7 -f b,c,d,e,f -a all --csv --groups -o data_csv/F7_bcdef_groups.csv
+python3 -m lethe forget F7 -f a,b,c,d,e,f -a all --csv -o data_csv/F7_abcdef.csv
+python3 -m lethe forget F7 -f a,b,c,d,e,f -a all --csv --groups -o data_csv/F7_abcdef_groups.csv
